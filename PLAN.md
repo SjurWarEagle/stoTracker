@@ -191,6 +191,9 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [ ] Integration tests for all frontend controller endpoints
 - [ ] Rename "convertion" to "refining" in database schema, model, and service layer
 - [ ] Apply Thymeleaf German locale for number formatting (currently using JavaScript toLocaleString)
+- [ ] Add input validation (name max length, dilithium/credits max bounds)
+- [ ] Add flash messages for user feedback on success/error operations
+- [ ] Extract inline JavaScript handlers to time.js for maintainability
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

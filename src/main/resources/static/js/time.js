@@ -34,14 +34,14 @@ function updateCountdowns() {
             targetTime = new Date(lastUpdated.getTime() + 20 * 60 * 1000);
             diff = targetTime - new Date();
         } else if (type === 'refining' || type === 'event') {
-            // Convertion/Event: countdown to 02:00 tomorrow
+            // Refining/Event: countdown to 02:00 tomorrow
             targetTime = getNext02_00CET();
             diff = targetTime - new Date();
         }
 
-        if (diff < 0) {
-            el.textContent = 'overdue';
-            el.classList.add('overdue');
+        if (diff <= 0) {
+            el.textContent = '0h 0m';
+            el.classList.remove('overdue');
         } else {
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -52,10 +52,12 @@ function updateCountdowns() {
 }
 
 // Update immediately and then every second
-updateClock();
-updateCountdowns();
-setInterval(updateClock, 1000);
-setInterval(updateCountdowns, 1000);
+function update() {
+    updateClock();
+    updateCountdowns();
+}
+update();
+setInterval(update, 1000);
 
 // Auto-submit numeric input forms on change
 document.querySelectorAll('.inline-form').forEach(form => {
