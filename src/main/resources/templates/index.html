@@ -63,9 +63,8 @@
                         <form action="/update" method="post" class="inline-form">
                             <input type="hidden" name="id" th:value="${data.id}">
                             <input type="hidden" name="dilithium" class="dilithium-value" th:value="${data.dilithium}">
-                            <input type="number"
+                            <input type="text"
                                    min="0"
-                                   step="1"
                                    class="lcars-input dilithium-input"
                                    th:value="${data.dilithium}">
                         </form>
@@ -114,9 +113,8 @@
                         <form action="/update" method="post" class="inline-form">
                             <input type="hidden" name="id" th:value="${data.id}">
                             <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
-                            <input type="number"
+                            <input type="text"
                                    min="0"
-                                   step="1"
                                    class="lcars-input credits-input"
                                    th:value="${data.credits}">
                         </form>

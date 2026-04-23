@@ -68,13 +68,31 @@ function update() {
 update();
 setInterval(update, 1000);
 
+// Parse German number input (accept 10.000 or 10,000 or 10000)
+function parseGermanNumber(str) {
+    if (!str) return 0;
+    // Remove dots (German thousands) and replace comma with dot (German decimal)
+    return Math.round(Number(str.replace(/\./g, '').replace(',', '.')));
+}
+
+// Format number with German locale
+function formatGermanNumber(value) {
+    return Number(value).toLocaleString('de-DE');
+}
+
 // Auto-submit numeric input forms on change
 document.querySelectorAll('.inline-form').forEach(form => {
-    const input = form.querySelector('input[type="number"]');
+    const input = form.querySelector('input[type="text"]');
     if (!input) return;
     input.addEventListener('change', () => {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        hiddenInput.value = input.value;
+        hiddenInput.value = parseGermanNumber(input.value);
+        input.value = formatGermanNumber(hiddenInput.value);
         form.submit();
+    });
+    input.addEventListener('blur', () => {
+        const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
+        hiddenInput.value = parseGermanNumber(input.value);
+        input.value = formatGermanNumber(hiddenInput.value);
     });
 });
