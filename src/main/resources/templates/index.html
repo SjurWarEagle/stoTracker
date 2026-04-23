@@ -64,11 +64,10 @@
                             <input type="hidden" name="id" th:value="${data.id}">
                             <input type="hidden" name="dilithium" class="dilithium-value">
                             <input type="text" 
-                                   value="10000"
-                                   th:value="${#numbers.formatDecimal(data.dilithium, 0, 'COMMA', 0, 'POINT')}" 
+                                   value="0"
                                    min="0"
-                                   onchange="var v=this.value.replace(/,/g,''); this.previousElementSibling.value=Math.round(v); this.value=Number(v).toLocaleString('de-DE')"
-                                   class="lcars-input dilithium-input">
+                                   class="lcars-input dilithium-input"
+                                   data-original-value="${data.dilithium}">
                         </form>
                     </td>
                     <td>
@@ -116,11 +115,10 @@
                             <input type="hidden" name="id" th:value="${data.id}">
                             <input type="hidden" name="credits" class="credits-value">
                             <input type="text" 
-                                   value="10000"
-                                   th:value="${#numbers.formatDecimal(data.credits, 0, 'COMMA', 0, 'POINT')}" 
+                                   value="0"
                                    min="0"
-                                   onchange="var v=this.value.replace(/,/g,''); this.previousElementSibling.value=Math.round(v); this.value=Number(v).toLocaleString('de-DE')"
-                                   class="lcars-input credits-input">
+                                   class="lcars-input credits-input"
+                                   data-original-value="${data.credits}">
                         </form>
                     </td>
                 </tr>

@@ -1,3 +1,25 @@
+// Format number with German locale (dot as thousands separator)
+function formatGermanNumber(value) {
+    return Number(value).toLocaleString('de-DE');
+}
+
+// Parse German number input (accept 10.000 or 10,000 or 10000)
+function parseGermanNumber(str) {
+    if (!str) return 0;
+    // Remove dots (German thousands) and replace comma with dot (German decimal)
+    return Math.round(Number(str.replace(/\./g, '').replace(',', '.')));
+}
+
+// Initialize number inputs with German format on page load
+function initNumberInputs() {
+    document.querySelectorAll('.lcars-input[data-original-value]').forEach(input => {
+        const originalValue = input.getAttribute('data-original-value');
+        if (originalValue) {
+            input.value = formatGermanNumber(originalValue);
+        }
+    });
+}
+
 // Live clock updates every second (CET timezone)
 function updateClock() {
     const now = new Date();
@@ -10,12 +32,12 @@ function updateClock() {
 // Get next 02:00 in CET
 function getNext02_00CET() {
     const now = new Date();
-    const cet = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
-    cet.setHours(2, 0, 0, 0);
-    if (cet.getTime() <= now.getTime()) {
-        cet.setDate(cet.getDate() + 1);
+    const cetTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+    cetTime.setHours(2, 0, 0, 0);
+    if (cetTime.getTime() <= now.getTime()) {
+        cetTime.setDate(cetTime.getDate() + 1);
     }
-    return cet;
+    return cetTime;
 }
 
 // Update countdown timers
@@ -34,7 +56,7 @@ function updateCountdowns() {
             targetTime = new Date(lastUpdated.getTime() + 20 * 60 * 1000);
             diff = targetTime - new Date();
         } else if (type === 'refining' || type === 'event') {
-            // Refining/Event: countdown to 02:00 tomorrow
+            // Refining/Event: countdown to 02:00 tomorrow CET
             targetTime = getNext02_00CET();
             diff = targetTime - new Date();
         }
@@ -56,6 +78,7 @@ function update() {
     updateClock();
     updateCountdowns();
 }
+initNumberInputs();
 update();
 setInterval(update, 1000);
 
@@ -65,7 +88,8 @@ document.querySelectorAll('.inline-form').forEach(form => {
     if (!input) return;
     input.addEventListener('change', () => {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        hiddenInput.value = input.value.replace(/\./g, '').replace(',', '.');
+        hiddenInput.value = parseGermanNumber(input.value);
+        input.value = formatGermanNumber(hiddenInput.value);
         form.submit();
     });
 });
