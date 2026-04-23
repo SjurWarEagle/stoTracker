@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -218,5 +219,79 @@ class StoControllerIntegrationTest {
                         .param("name", "   ")
                         .contentType("application/x-www-form-urlencoded"))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void update_withNonExistentId_redirects() throws Exception {
+        mockMvc.perform(post("/update")
+                        .param("id", "99999")
+                        .param("dilithium", "500")
+                        .param("credits", "1000")
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void timestamp_withNonExistentId_redirects() throws Exception {
+        mockMvc.perform(post("/timestamp")
+                        .param("id", "99999")
+                        .param("type", "recruitment")
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void timestamp_withInvalidType_redirects() throws Exception {
+        StoData saved = repository.save(new StoData("TimestampChar"));
+
+        mockMvc.perform(post("/timestamp")
+                        .param("id", String.valueOf(saved.getId()))
+                        .param("type", "invalid_type")
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void untimestamp_withNonExistentId_redirects() throws Exception {
+        mockMvc.perform(post("/untimestamp")
+                        .param("id", "99999")
+                        .param("type", "recruitment")
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void untimestamp_withInvalidType_redirects() throws Exception {
+        StoData saved = repository.save(new StoData("TimestampChar"));
+
+        mockMvc.perform(post("/untimestamp")
+                        .param("id", String.valueOf(saved.getId()))
+                        .param("type", "invalid_type")
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void delete_withNonExistentName_redirects() throws Exception {
+        mockMvc.perform(post("/delete")
+                        .param("name", "NonExistent")
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    void update_withNullDilithiumAndCredits_succeeds() throws Exception {
+        StoData saved = repository.save(new StoData("UpdateChar"));
+        int originalDilithium = saved.getDilithium();
+        int originalCredits = saved.getCredits();
+
+        mockMvc.perform(post("/update")
+                        .param("id", String.valueOf(saved.getId()))
+                        .contentType("application/x-www-form-urlencoded"))
+                .andExpect(status().is3xxRedirection());
+
+        StoData updated = repository.findById(saved.getId()).orElseThrow();
+        assertEquals(Integer.valueOf(originalDilithium), updated.getDilithium());
+        assertEquals(Integer.valueOf(originalCredits), updated.getCredits());
     }
 }

@@ -291,4 +291,159 @@ class StoDataServiceTest {
         assertTrue(result.success());
         assertNotNull(result.data().getRecruitmentTime());
     }
+
+    @Test
+    void recordTimestamp_refiningAlias_setsTime() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.recordTimestamp(id, "refining");
+
+        // Assert
+        assertTrue(result.success());
+        assertNotNull(result.data().getConvertionTime());
+    }
+
+    @Test
+    void clearTimestamp_recruitment_clearsTime() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setRecruitmentTime(LocalDateTime.now());
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(id, "recruitment");
+
+        // Assert
+        assertTrue(result.success());
+        assertNull(result.data().getRecruitmentTime());
+    }
+
+    @Test
+    void clearTimestamp_convertion_clearsTime() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setConvertionTime(LocalDateTime.now());
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(id, "convertion");
+
+        // Assert
+        assertTrue(result.success());
+        assertNull(result.data().getConvertionTime());
+    }
+
+    @Test
+    void clearTimestamp_refiningAlias_clearsTime() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setConvertionTime(LocalDateTime.now());
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(id, "refining");
+
+        // Assert
+        assertTrue(result.success());
+        assertNull(result.data().getConvertionTime());
+    }
+
+    @Test
+    void clearTimestamp_event_clearsTime() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setEventTime(LocalDateTime.now());
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(id, "event");
+
+        // Assert
+        assertTrue(result.success());
+        assertNull(result.data().getEventTime());
+    }
+
+    @Test
+    void clearTimestamp_invalidType_fails() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(id, "invalid");
+
+        // Assert
+        assertFalse(result.success());
+        assertEquals("Invalid timestamp type", result.error());
+    }
+
+    @Test
+    void clearTimestamp_nonExistentId_fails() {
+        // Arrange
+        when(repository.findById(999L)).thenReturn(Optional.empty());
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(999L, "recruitment");
+
+        // Assert
+        assertFalse(result.success());
+        assertEquals("Record not found", result.error());
+    }
+
+    @Test
+    void updateData_setsUpdatedAt() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setUpdatedAt(LocalDateTime.now().minusHours(1));
+        LocalDateTime beforeUpdate = existing.getUpdatedAt();
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.updateData(id, 100, null);
+
+        // Assert
+        assertTrue(result.success());
+        assertNotNull(result.data().getUpdatedAt());
+    }
+
+    @Test
+    void recordTimestamp_setsUpdatedAt() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setUpdatedAt(LocalDateTime.now().minusHours(1));
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.recordTimestamp(id, "recruitment");
+
+        // Assert
+        assertTrue(result.success());
+        assertNotNull(result.data().getUpdatedAt());
+    }
 }

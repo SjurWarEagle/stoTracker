@@ -1,25 +1,3 @@
-// Format number with German locale (dot as thousands separator)
-function formatGermanNumber(value) {
-    return Number(value).toLocaleString('de-DE');
-}
-
-// Parse German number input (accept 10.000 or 10,000 or 10000)
-function parseGermanNumber(str) {
-    if (!str) return 0;
-    // Remove dots (German thousands) and replace comma with dot (German decimal)
-    return Math.round(Number(str.replace(/\./g, '').replace(',', '.')));
-}
-
-// Initialize number inputs with German format on page load
-function initNumberInputs() {
-    document.querySelectorAll('.lcars-input[data-original-value]').forEach(input => {
-        const originalValue = input.getAttribute('data-original-value');
-        if (originalValue) {
-            input.value = formatGermanNumber(originalValue);
-        }
-    });
-}
-
 // Live clock updates every second (CET timezone)
 function updateClock() {
     const now = new Date();
@@ -87,18 +65,16 @@ function update() {
     updateClock();
     updateCountdowns();
 }
-initNumberInputs();
 update();
 setInterval(update, 1000);
 
 // Auto-submit numeric input forms on change
 document.querySelectorAll('.inline-form').forEach(form => {
-    const input = form.querySelector('input[type="text"]');
+    const input = form.querySelector('input[type="number"]');
     if (!input) return;
     input.addEventListener('change', () => {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        hiddenInput.value = parseGermanNumber(input.value);
-        input.value = formatGermanNumber(hiddenInput.value);
+        hiddenInput.value = input.value;
         form.submit();
     });
 });

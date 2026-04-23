@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>stoTracker</title>
+    <title>StarTrekOnline 🖖 - Daily Tasks</title>
     <link rel="icon" th:href="@{/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/lcars.css}">
 </head>
 <body>
     <header class="lcars-header">
-        <div class="lcars-title">stoTracker</div>
+        <div class="lcars-title">StarTrekOnline 🖖 - Daily Tasks</div>
         <form class="add-form" action="/add" method="post">
             <input type="text" name="name" placeholder="Character Name" required>
             <button type="submit" class="lcars-btn add-btn">ADD</button>
@@ -62,12 +62,12 @@
                     <td>
                         <form action="/update" method="post" class="inline-form">
                             <input type="hidden" name="id" th:value="${data.id}">
-                            <input type="hidden" name="dilithium" class="dilithium-value">
-                            <input type="text" 
-                                   value="0"
+                            <input type="hidden" name="dilithium" class="dilithium-value" th:value="${data.dilithium}">
+                            <input type="number"
                                    min="0"
+                                   step="1"
                                    class="lcars-input dilithium-input"
-                                   data-original-value="${data.dilithium}">
+                                   th:value="${data.dilithium}">
                         </form>
                     </td>
                     <td>
@@ -113,12 +113,12 @@
                     <td>
                         <form action="/update" method="post" class="inline-form">
                             <input type="hidden" name="id" th:value="${data.id}">
-                            <input type="hidden" name="credits" class="credits-value">
-                            <input type="text" 
-                                   value="0"
+                            <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
+                            <input type="number"
                                    min="0"
+                                   step="1"
                                    class="lcars-input credits-input"
-                                   data-original-value="${data.credits}">
+                                   th:value="${data.credits}">
                         </form>
                     </td>
                 </tr>

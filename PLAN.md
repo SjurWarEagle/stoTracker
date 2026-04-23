@@ -18,10 +18,10 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - Name column is readonly
 - Header contains add new name form
 - Footer shows current time (HH:mm CET, updated live)
-- Credits and dilithium are numeric input fields with German number format:
-  - Display: 10.000 for ten thousand (toLocaleString 'de-DE')
-  - Input: accepts both 10.000 and 10000 formats
-  - onchange handler strips thousand separators before submitting numeric value
+- Credits and dilithium are numeric input fields with native browser number formatting:
+  - Browser handles locale-based display (type="number")
+  - Hidden inputs carry raw integer values for form submission
+  - onchange handler passes raw value to hidden input before submit
 - Recruitment, Refining, Event timestamps:
   - Green checkmark (✓) button to SET timestamp
   - Red X (✗) button to UNSET timestamp
@@ -123,6 +123,29 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Runs as root user (to ensure volume write permissions)
   - Verification: Docker image builds successfully
 
+- [x] **Task 12:** Fix number input handling
+  - Files: `src/main/resources/static/js/time.js`, `src/main/resources/templates/index.html`
+  - Remove JS-based German number formatting (formatGermanNumber, parseGermanNumber, initNumberInputs)
+  - Use native `<input type="number">` - browser handles locale display
+  - Hidden inputs carry raw integer values
+  - Verification: Enter `34780` in dilithium field, submit, DB stores `34780`
+
+- [x] **Task 13:** Selenium Chrome browser integration test
+  - File: `src/test/java/com/stotracker/controller/StoControllerBrowserTest.java`
+  - Creates character "unit-char", updates numbers, sets/unset timestamps, verifies DB, deletes
+  - Tests both German (de-DE) and American (en-US) locale formatting
+  - Dependency: `selenium-chrome-driver` 4.16.0, `webdrivermanager` 5.6.2
+  - Runs against embedded test server on port 4545
+  - Verification: `mvn test -Dtest=StoControllerBrowserTest` passes
+
+- [x] **Task 14:** Comprehensive test coverage
+  - Files: Added `ResultTest.java`, `StoDataTest.java`, extended `StoControllerIntegrationTest.java`
+  - Service layer: 26 tests covering all methods including clearTimestamp, refining alias, updatedAt
+  - Controller layer: 20 integration tests covering error handling for invalid/non-existent IDs
+  - Model layer: 10 unit tests for StoData entity
+  - Result record: 5 unit tests
+  - Verification: All 61 backend tests pass
+
 ## File Structure
 ```
 /dataDisk/IdeaProjects/stoTracker/
@@ -154,9 +177,14 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
     │       │   ├── css/lcars.css
     │       │   └── js/time.js
     │       └── templates/index.html
-    └── test/java/com/stotracker/
-        ├── controller/StoControllerIntegrationTest.java
-        └── service/StoDataServiceTest.java
+     └── test/java/com/stotracker/
+        ├── controller/
+        │   ├── StoControllerIntegrationTest.java
+        │   └── StoControllerBrowserTest.java
+        ├── model/StoDataTest.java
+        └── service/
+            ├── StoDataServiceTest.java
+            └── ResultTest.java
 ```
 
 ## Dependency Graph
@@ -188,9 +216,10 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [x] No database remains after character deletion
 
 ## Pending Tasks
-- [ ] Integration tests for all frontend controller endpoints
+- [x] Fix number input handling - remove JS formatting, use native `<input type="number">` (Task 12)
+- [x] Add Selenium Chrome browser integration test (Task 13)
+- [x] Comprehensive test coverage - backend, frontend, integration (Task 14)
 - [ ] Rename "convertion" to "refining" in database schema, model, and service layer
-- [ ] Apply Thymeleaf German locale for number formatting (currently using JavaScript toLocaleString)
 - [ ] Add input validation (name max length, dilithium/credits max bounds)
 - [ ] Add flash messages for user feedback on success/error operations
 - [ ] Extract inline JavaScript handlers to time.js for maintainability
