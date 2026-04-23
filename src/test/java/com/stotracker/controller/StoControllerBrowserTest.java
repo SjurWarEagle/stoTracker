@@ -47,6 +47,9 @@ class StoControllerBrowserTest {
         repository.deleteAll();
         FirefoxOptions options = new FirefoxOptions();
 
+        // Always run in headless mode for CI/automated testing
+        options.addArguments("--headless");
+
         // Add locale based on test name
         String testName = testInfo.getDisplayName();
         if (testName.contains("GermanLocale")) {
@@ -240,6 +243,164 @@ class StoControllerBrowserTest {
         Optional<StoData> updated = repository.findById(charId);
         assertTrue(updated.isPresent());
         assertEquals(5555, updated.get().getDilithium());
+    }
+
+    @Test
+    void dilithiumMultiplier_highValue_showsGreenColor() {
+        // 84000 dilithium = 10x multiplier (green: >5x)
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        StoData charData = repository.findById(charId).get();
+        charData.setDilithium(84000);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        WebElement multiplier = driver.findElement(By.cssSelector(".dilithium-multiplier"));
+        assertNotNull(multiplier);
+        assertEquals("10x", multiplier.getText().trim());
+        assertTrue(multiplier.getAttribute("class").contains("multiplier-high"),
+                "Expected green (multiplier-high) for 10x but got: " + multiplier.getAttribute("class"));
+    }
+
+    @Test
+    void dilithiumMultiplier_midValue_showsOrangeColor() {
+        // 32000 dilithium = 4x multiplier (orange: 3-5x)
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        StoData charData = repository.findById(charId).get();
+        charData.setDilithium(32000);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        WebElement multiplier = driver.findElement(By.cssSelector(".dilithium-multiplier"));
+        assertNotNull(multiplier);
+        assertEquals("4x", multiplier.getText().trim());
+        assertTrue(multiplier.getAttribute("class").contains("multiplier-mid"),
+                "Expected orange (multiplier-mid) for 4x but got: " + multiplier.getAttribute("class"));
+    }
+
+    @Test
+    void dilithiumMultiplier_lowValue_showsRedColor() {
+        // 16000 dilithium = 2x multiplier (red: ≤2x)
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        StoData charData = repository.findById(charId).get();
+        charData.setDilithium(16000);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        WebElement multiplier = driver.findElement(By.cssSelector(".dilithium-multiplier"));
+        assertNotNull(multiplier);
+        assertEquals("2x", multiplier.getText().trim());
+        assertTrue(multiplier.getAttribute("class").contains("multiplier-low"),
+                "Expected red (multiplier-low) for 2x but got: " + multiplier.getAttribute("class"));
+    }
+
+    @Test
+    void creditsWarning_critical_showsFireIcon() {
+        // 50000 credits < 100k should show 🚨
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        StoData charData = repository.findById(charId).get();
+        charData.setCredits(50000);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        WebElement warning = row.findElement(By.cssSelector(".credits-warning"));
+        assertNotNull(warning);
+        String warningText = warning.getText();
+        assertTrue(warningText.contains("🚨"),
+                "Expected 🚨 for credits < 100k but got: " + warningText);
+    }
+
+    @Test
+    void creditsWarning_low_showsWarningIcon() {
+        // 500000 credits < 1M should show ⚠️
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        StoData charData = repository.findById(charId).get();
+        charData.setCredits(500000);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        WebElement warning = row.findElement(By.cssSelector(".credits-warning"));
+        assertNotNull(warning);
+        String warningText = warning.getText();
+        assertTrue(warningText.contains("⚠️"),
+                "Expected ⚠️ for credits < 1M but got: " + warningText);
+    }
+
+    @Test
+    void creditsWarning_ok_showsNoIcon() {
+        // 2000000 credits >= 1M should show no icon
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        StoData charData = repository.findById(charId).get();
+        charData.setCredits(2000000);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        WebElement warning = row.findElement(By.cssSelector(".credits-warning"));
+        assertNotNull(warning);
+        String warningText = warning.getText().trim();
+        assertEquals("", warningText,
+                "Expected no warning icon for credits >= 1M but got: " + warningText);
+    }
+
+    @Test
+    void dilithiumMultiplier_updatesOnChange() {
+        // Create character with initial dilithium
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        // Set initial value
+        StoData charData = repository.findById(charId).get();
+        charData.setDilithium(8000); // 1x
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        // Verify initial multiplier
+        WebElement multiplier = row.findElement(By.cssSelector(".dilithium-multiplier"));
+        assertEquals("1x", multiplier.getText().trim());
+
+        // Change dilithium via UI
+        WebElement input = row.findElement(By.cssSelector("input.dilithium-input"));
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "arguments[0].value = '48000';", input);
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", input);
+        waitForPageLoad();
+
+        // Verify multiplier updated to 6x (green)
+        row = findCharacterRow(TEST_CHAR_NAME);
+        multiplier = row.findElement(By.cssSelector(".dilithium-multiplier"));
+        assertEquals("6x", multiplier.getText().trim());
+        assertTrue(multiplier.getAttribute("class").contains("multiplier-high"),
+                "Expected green for 6x but got: " + multiplier.getAttribute("class"));
     }
 
     private void createCharacter(String name) {

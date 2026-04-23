@@ -63,7 +63,7 @@
                         <div class="dilithium-cell">
                             <span class="dilithium-multiplier"
                                   th:data-value="${data.dilithium}"
-                                  th:class="${data.dilithium != null && data.dilithium > 50000 ? 'multiplier-high' : (data.dilithium != null && data.dilithium > 24000 ? 'multiplier-mid' : 'multiplier-low')}">
+                                  th:class="${'dilithium-multiplier ' + (data.dilithium != null && data.dilithium > 40000 ? 'multiplier-high' : (data.dilithium != null && data.dilithium >= 24000 ? 'multiplier-mid' : 'multiplier-low'))}">
                                 <span th:text="${data.dilithium != null ? (data.dilithium / 8000) : '0'}">0</span>x
                             </span>
                             <form action="/update" method="post" class="inline-form">
