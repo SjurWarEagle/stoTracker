@@ -14,7 +14,7 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - **HTML/CSS/JS** (frontend with LCARS styling)
 
 ## Features
-- Main page displays: `delete | name | event | dilithium | convertion | recruitment | credits`
+- Main page displays: `delete | name | event | dilithium ore | refining | recruitment | credits`
 - Name column is readonly
 - Header contains add new name form
 - Footer shows current time (HH:mm CET, updated live)
@@ -22,14 +22,14 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Display: 10.000 for ten thousand (toLocaleString 'de-DE')
   - Input: accepts both 10.000 and 10000 formats
   - onchange handler strips thousand separators before submitting numeric value
-- Recruitment, Convertion, Event timestamps:
+- Recruitment, Refining, Event timestamps:
   - Green checkmark (✓) button to SET timestamp
   - Red X (✗) button to UNSET timestamp
   - Countdown timer displayed between buttons when set
   - Recruitment: countdown from timestamp + 20 minutes
-  - Convertion/Event: countdown to 02:00 tomorrow CET
+  - Refining/Event: countdown to 02:00 tomorrow CET
   - "overdue" shown in red when timer < 0
-  - Last updated time shown smaller on second line
+  - Last updated time shown smaller on second line (centered)
   - "unset" label shown when not set
 - Delete column with X button (requires confirmation)
 - Data sorted alphabetically by name
@@ -169,7 +169,7 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 ## Exit Criteria
 - [x] Application compiles without errors
 - [x] Application starts successfully on localhost:4545
-- [x] Main page displays all columns: name | dilithium | credits | recruitment | convertion | event | delete
+- [x] Main page displays all columns: delete | name | event | dilithium ore | refining | recruitment | credits
 - [x] Add name form in header works
 - [x] Delete button shows confirmation dialog and deletes data
 - [x] Credits/dilithium numeric input fields update correctly
@@ -189,7 +189,8 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 
 ## Pending Tasks
 - [ ] Integration tests for all frontend controller endpoints
-- [ ] Fix typo: "convertion" → "conversion" throughout codebase
+- [ ] Rename "convertion" to "refining" in database schema, model, and service layer
+- [ ] Apply Thymeleaf German locale for number formatting (currently using JavaScript toLocaleString)
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

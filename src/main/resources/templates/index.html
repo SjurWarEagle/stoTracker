@@ -23,8 +23,8 @@
                     <th>DELETE</th>
                     <th>NAME</th>
                     <th>EVENT</th>
-                    <th>DILITHIUM</th>
-                    <th>CONVERTION</th>
+                    <th>DILITHIUM ORE</th>
+                    <th>REFINING</th>
                     <th>RECRUITMENT</th>
                     <th>CREDITS</th>
                 </tr>
@@ -75,17 +75,17 @@
                         <div class="timestamp-cell">
                             <form action="/timestamp" method="post" class="timestamp-form">
                                 <input type="hidden" name="id" th:value="${data.id}">
-                                <input type="hidden" name="type" value="convertion">
+                                <input type="hidden" name="type" value="refining">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
                             <div class="timestamp-info" th:if="${data.convertionTime}">
-                                <span class="countdown" th:data-timestamp="${data.convertionTime}" data-type="convertion">--:--</span>
+                                <span class="countdown" th:data-timestamp="${data.convertionTime}" data-type="refining">--:--</span>
                                 <span class="last-updated" th:text="${#temporals.format(data.convertionTime, 'HH:mm')}">--:--</span>
                             </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
                                   th:if="${data.convertionTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
-                                <input type="hidden" name="type" value="convertion">
+                                <input type="hidden" name="type" value="refining">
                                 <button type="submit" class="lcars-btn timestamp-btn unset-btn">✗</button>
                             </form>
                             <span class="unset-label" th:unless="${data.convertionTime}">unset</span>

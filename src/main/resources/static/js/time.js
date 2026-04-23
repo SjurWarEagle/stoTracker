@@ -33,7 +33,7 @@ function updateCountdowns() {
             // Recruitment: 20 minutes from last updated
             targetTime = new Date(lastUpdated.getTime() + 20 * 60 * 1000);
             diff = targetTime - new Date();
-        } else if (type === 'convertion' || type === 'event') {
+        } else if (type === 'refining' || type === 'event') {
             // Convertion/Event: countdown to 02:00 tomorrow
             targetTime = getNext02_00CET();
             diff = targetTime - new Date();
