@@ -243,7 +243,6 @@ html, body {
 .panel-7,
 .panel-8,
 .panel-9,
-.panel-10,
 .panel-11,
 .panel-12,
 .panel-13,
@@ -321,7 +320,6 @@ html, body {
 .panel-10 {
     height: 81px;
     flex-shrink: 0;
-    border-top: var(--panel-border);
     background-color: var(--gold);
 }
 
@@ -386,74 +384,10 @@ html, body {
     opacity: 0.8;
 }
 
-/* Vertical accent stripe on right side of filler */
-.lcars-frame-filler {
-    flex: 1;
-    width: 100%;
-    position: relative;
-    min-height: 60px;
-}
-
-.lcars-frame-filler::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 12px;
-    height: 100%;
-    background: linear-gradient(180deg,
-        var(--left-frame-top-color) 0%,
-        var(--left-frame-top-color) 30%,
-        black 30%,
-        black 70%,
-        var(--left-frame-top-color) 70%,
-        var(--left-frame-top-color) 100%);
-}
-
 /* ===========================
    LCARS SIDEBAR NAV BUTTONS
    Based on LCARS v24.2
    =========================== */
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    flex: 1;
-    gap: 4px;
-}
-
-.sidebar-nav button,
-.sidebar-nav a {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    flex: 1;
-    min-height: 60px;
-    width: 100%;
-    background-color: var(--left-frame-top-color);
-    border-radius: 0;
-    border-bottom: var(--panel-border);
-    padding: var(--left-frame-padding);
-    text-decoration: none;
-    text-align: right;
-    word-break: break-all;
-    text-transform: uppercase;
-    color: black;
-    font-family: 'Antonio', 'Arial Narrow', 'Avenir Next Condensed', sans-serif;
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.sidebar-nav button:first-child {
-    border-radius: 0 20px 0 0;
-}
-    right: -30px;
-    width: 60px;
-    height: 60px;
-    background: var(--lcars-bg);
-    border-radius: 0 30px 0 0;
-}
 
 /* Label text inside elbow */
 .lcars-frame-elbow .lcars-frame-label {

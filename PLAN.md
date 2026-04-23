@@ -234,6 +234,13 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Theme selector dropdown in top right
   - Vertical LCARS border with elbow panels
   - Responsive design
+- [x] CSS cleanup and code review (Task 23):
+  - Remove panel-10 borders
+  - Remove orphaned CSS (broken rules without selectors)
+  - Remove duplicate .sidebar-nav and .lcars-frame-filler definitions
+  - Remove empty theme-selector div from HTML
+  - Remove orphaned theme JavaScript from HTML
+  - All 80 tests passing
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

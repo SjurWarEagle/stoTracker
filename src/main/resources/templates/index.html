@@ -38,8 +38,6 @@
                         <div class="lcars-header-subtitle">🖖 Daily Task Tracker</div>
                     </div>
                 </div>
-                <div class="theme-selector">
-                </div>
             </header>
 
             <!-- Flash Messages -->
@@ -190,22 +188,5 @@
     </div>
 
     <script th:src="@{/js/time.js}"></script>
-    <script>
-        // Theme management
-        function changeTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            // Store preference
-            localStorage.setItem('lcars-theme', theme);
-        }
-
-        // Load saved theme on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('lcars-theme');
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                document.getElementById('theme-select').value = savedTheme;
-            }
-        });
-    </script>
 </body>
 </html>
