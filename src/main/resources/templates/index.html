@@ -60,14 +60,21 @@
                         </div>
                     </td>
                     <td>
-                        <form action="/update" method="post" class="inline-form">
-                            <input type="hidden" name="id" th:value="${data.id}">
-                            <input type="hidden" name="dilithium" class="dilithium-value" th:value="${data.dilithium}">
-                            <input type="text"
-                                   min="0"
-                                   class="lcars-input dilithium-input"
-                                   th:value="${data.dilithium}">
-                        </form>
+                        <div class="dilithium-cell">
+                            <span class="dilithium-multiplier"
+                                  th:data-value="${data.dilithium}"
+                                  th:class="${data.dilithium != null && data.dilithium > 50000 ? 'multiplier-high' : (data.dilithium != null && data.dilithium > 24000 ? 'multiplier-mid' : 'multiplier-low')}">
+                                <span th:text="${data.dilithium != null ? (data.dilithium / 8000) : '0'}">0</span>x
+                            </span>
+                            <form action="/update" method="post" class="inline-form">
+                                <input type="hidden" name="id" th:value="${data.id}">
+                                <input type="hidden" name="dilithium" class="dilithium-value" th:value="${data.dilithium}">
+                                <input type="text"
+                                       min="0"
+                                       class="lcars-input dilithium-input"
+                                       th:value="${data.dilithium}">
+                            </form>
+                        </div>
                     </td>
                     <td>
                         <div class="timestamp-cell">
@@ -110,14 +117,21 @@
                         </div>
                     </td>
                     <td>
-                        <form action="/update" method="post" class="inline-form">
-                            <input type="hidden" name="id" th:value="${data.id}">
-                            <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
-                            <input type="text"
-                                   min="0"
-                                   class="lcars-input credits-input"
-                                   th:value="${data.credits}">
-                        </form>
+                        <div class="credits-cell">
+                            <form action="/update" method="post" class="inline-form">
+                                <input type="hidden" name="id" th:value="${data.id}">
+                                <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
+                                <input type="text"
+                                       min="0"
+                                       class="lcars-input credits-input"
+                                       th:value="${data.credits}">
+                            </form>
+                            <span class="credits-warning"
+                                  th:data-value="${data.credits}">
+                                <span th:if="${data.credits != null && data.credits < 100000}" class="warning-critical">🚨</span>
+                                <span th:if="${data.credits != null && data.credits >= 100000 && data.credits < 1000000}" class="warning-low">⚠️</span>
+                            </span>
+                        </div>
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(stoDataList)}">

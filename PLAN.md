@@ -220,6 +220,9 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [x] Fix number input handling with German format parsing (Task 12)
 - [x] Add Selenium Firefox browser integration test (Task 13)
 - [x] Comprehensive test coverage - backend, frontend, integration (Task 14)
+- [x] Add dilithium multiplier display (floor/8000) with color coding (Task 15)
+- [x] Add credits warning icons (⚠️ <1M, 🚨 <100k) (Task 16)
+- [x] Locale-aware number formatting (Task 17)
 - [ ] Rename "convertion" to "refining" in database schema, model, and service layer
 - [ ] Add input validation (name max length, dilithium/credits max bounds)
 - [ ] Add flash messages for user feedback on success/error operations

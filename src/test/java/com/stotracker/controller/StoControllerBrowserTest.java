@@ -198,6 +198,50 @@ class StoControllerBrowserTest {
         assertTrue(value.matches("[\\d.,]+"), "Expected numeric format but got: " + value);
     }
 
+    @Test
+    void numberInput_LocaleRoundTrip_convertsCorrectly() {
+        // This test verifies the full round-trip: backend value -> display -> parse -> backend
+        // Create character
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+
+        // Set initial value via DB
+        StoData charData = repository.findById(charId).get();
+        charData.setDilithium(1234567);
+        charData.setCredits(987654);
+        repository.save(charData);
+
+        // Load page and verify display value uses user's locale
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        // Get displayed value
+        WebElement dilithiumInput = row.findElement(By.cssSelector("input.dilithium-input"));
+        String displayedDilithium = dilithiumInput.getAttribute("value");
+        assertNotNull(displayedDilithium);
+
+        // Parse the displayed value using the same locale-aware parser
+        Number parsedValue = (Number) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return parseLocaleNumber(arguments[0]);", displayedDilithium);
+
+        // Verify parsed value matches original
+        assertEquals(1234567L, parsedValue.longValue(), "Locale parser should correctly parse displayed value");
+
+        // Now change the value to a new number
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "arguments[0].value = '5555';", dilithiumInput);
+        // Trigger change event to submit form (blur only reformats, change submits)
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", dilithiumInput);
+        waitForPageLoad();
+
+        // Verify new value is formatted and stored correctly
+        Optional<StoData> updated = repository.findById(charId);
+        assertTrue(updated.isPresent());
+        assertEquals(5555, updated.get().getDilithium());
+    }
+
     private void createCharacter(String name) {
         driver.get(BASE_URL + port);
         WebElement nameInput = driver.findElement(By.cssSelector(".add-form input[name=name]"));

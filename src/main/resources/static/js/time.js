@@ -68,31 +68,82 @@ function update() {
 update();
 setInterval(update, 1000);
 
-// Parse German number input (accept 10.000 or 10,000 or 10000)
-function parseGermanNumber(str) {
+// Parse locale-aware number input (accepts both German 10.000 and American 10,000 formats)
+function parseLocaleNumber(str) {
     if (!str) return 0;
-    // Remove dots (German thousands) and replace comma with dot (German decimal)
-    return Math.round(Number(str.replace(/\./g, '').replace(',', '.')));
+    // Detect format: if string contains both '.' and ',', last separator is likely thousands
+    // German: 1.234.567 (dots for thousands), American: 1,234,567 (commas for thousands)
+    // Strategy: find the last non-digit separator, assume it's thousands separator
+    // The other separator (if exists) is decimal separator
+    const cleanStr = str.trim();
+    const lastDot = cleanStr.lastIndexOf('.');
+    const lastComma = cleanStr.lastIndexOf(',');
+
+    if (lastDot > lastComma) {
+        // Dot is thousands separator (German style: 1.234.567)
+        return Math.round(Number(cleanStr.replace(/\./g, '').replace(',', '.')));
+    } else if (lastComma > lastDot) {
+        // Comma is thousands separator (American style: 1,234,567)
+        return Math.round(Number(cleanStr.replace(/,/g, '')));
+    } else {
+        // No thousands separator found, just parse
+        return Math.round(Number(cleanStr));
+    }
 }
 
-// Format number with German locale
-function formatGermanNumber(value) {
-    return Number(value).toLocaleString('de-DE');
+// Format number using user's locale
+function formatLocaleNumber(value) {
+    return Number(value).toLocaleString();
 }
 
 // Auto-submit numeric input forms on change
-document.querySelectorAll('.inline-form').forEach(form => {
+document.querySelectorAll('.inline-form').forEach(function(form) {
     const input = form.querySelector('input[type="text"]');
     if (!input) return;
-    input.addEventListener('change', () => {
+    input.addEventListener('change', function(e) {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        hiddenInput.value = parseGermanNumber(input.value);
-        input.value = formatGermanNumber(hiddenInput.value);
+        const value = parseLocaleNumber(input.value);
+        hiddenInput.value = value;
+        input.value = formatLocaleNumber(value);
+
+        // Update dilithium multiplier
+        const dilithiumCell = input.closest('.dilithium-cell');
+        if (dilithiumCell) {
+            const multiplierEl = dilithiumCell.querySelector('.dilithium-multiplier');
+            if (multiplierEl) {
+                const multiplier = Math.floor(value / 8000);
+                multiplierEl.textContent = multiplier + 'x';
+                multiplierEl.classList.remove('multiplier-high', 'multiplier-mid', 'multiplier-low');
+                if (multiplier > 5) {
+                    multiplierEl.classList.add('multiplier-high');
+                } else if (multiplier >= 3) {
+                    multiplierEl.classList.add('multiplier-mid');
+                } else {
+                    multiplierEl.classList.add('multiplier-low');
+                }
+            }
+        }
+
+        // Update credits warning
+        const creditsCell = input.closest('.credits-cell');
+        if (creditsCell) {
+            const warningEl = creditsCell.querySelector('.credits-warning');
+            if (warningEl) {
+                let html = '';
+                if (value < 100000) {
+                    html = '<span class="warning-critical">🚨</span>';
+                } else if (value < 1000000) {
+                    html = '<span class="warning-low">⚠️</span>';
+                }
+                warningEl.innerHTML = html;
+            }
+        }
+
         form.submit();
     });
-    input.addEventListener('blur', () => {
+    input.addEventListener('blur', function() {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        hiddenInput.value = parseGermanNumber(input.value);
-        input.value = formatGermanNumber(hiddenInput.value);
+        hiddenInput.value = parseLocaleNumber(input.value);
+        input.value = formatLocaleNumber(hiddenInput.value);
     });
 });
