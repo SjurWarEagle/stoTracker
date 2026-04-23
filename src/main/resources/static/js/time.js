@@ -12,7 +12,7 @@ function getNext02_00CET() {
     const now = new Date();
     const cet = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
     cet.setHours(2, 0, 0, 0);
-    if (cetown.getTime() <= now.getTime()) {
+    if (cet.getTime() <= now.getTime()) {
         cet.setDate(cet.getDate() + 1);
     }
     return cet;

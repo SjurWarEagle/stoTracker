@@ -20,55 +20,56 @@
         <table class="lcars-table">
             <thead>
                 <tr>
-                    <th>NAME</th>
-                    <th>DILITHIUM</th>
-                    <th>CREDITS</th>
-                    <th>RECRUITMENT</th>
-                    <th>CONVERTION</th>
-                    <th>EVENT</th>
                     <th>DELETE</th>
+                    <th>NAME</th>
+                    <th>EVENT</th>
+                    <th>DILITHIUM</th>
+                    <th>CONVERTION</th>
+                    <th>RECRUITMENT</th>
+                    <th>CREDITS</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="data : ${stoDataList}">
+                    <td>
+                        <form action="/delete" method="post" class="delete-form"
+                              onsubmit="return confirm('Delete ' + this.querySelector('input[name=name]').value + '?')">
+                            <input type="hidden" name="name" th:value="${data.name}">
+                            <button type="submit" class="lcars-btn delete-btn">X</button>
+                        </form>
+                    </td>
                     <td class="name-cell" th:text="${data.name}">Name</td>
-                    <td>
-                        <form action="/update" method="post" class="inline-form">
-                            <input type="hidden" name="id" th:value="${data.id}">
-                            <input type="hidden" name="dilithium" class="dilithium-value">
-                            <input type="text" th:value="${#numbers.formatDecimal(data.dilithium, 0, 'COMMA', 0, 'POINT')}" min="0"
-                                   onchange="this.value = this.value.replace(/\./g, '').replace(',', '.'); this.previousElementSibling.value = Math.round(this.value)"
-                                   class="lcars-input dilithium-input">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="/update" method="post" class="inline-form">
-                            <input type="hidden" name="id" th:value="${data.id}">
-                            <input type="hidden" name="credits" class="credits-value">
-                            <input type="text" th:value="${#numbers.formatDecimal(data.credits, 0, 'COMMA', 0, 'POINT')}" min="0"
-                                   onchange="this.value = this.value.replace(/\./g, '').replace(',', '.'); this.previousElementSibling.value = Math.round(this.value)"
-                                   class="lcars-input credits-input">
-                        </form>
-                    </td>
                     <td>
                         <div class="timestamp-cell">
                             <form action="/timestamp" method="post" class="timestamp-form">
                                 <input type="hidden" name="id" th:value="${data.id}">
-                                <input type="hidden" name="type" value="recruitment">
+                                <input type="hidden" name="type" value="event">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
-                            <div class="timestamp-info" th:if="${data.recruitmentTime}">
-                                <span class="countdown" th:data-timestamp="${data.recruitmentTime}" data-type="recruitment">--:--</span>
-                                <span class="last-updated" th:text="${#temporals.format(data.recruitmentTime, 'HH:mm')}">--:--</span>
+                            <div class="timestamp-info" th:if="${data.eventTime}">
+                                <span class="countdown" th:data-timestamp="${data.eventTime}" data-type="event">--:--</span>
+                                <span class="last-updated" th:text="${#temporals.format(data.eventTime, 'HH:mm')}">--:--</span>
                             </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
-                                  th:if="${data.recruitmentTime}">
+                                  th:if="${data.eventTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
-                                <input type="hidden" name="type" value="recruitment">
+                                <input type="hidden" name="type" value="event">
                                 <button type="submit" class="lcars-btn timestamp-btn unset-btn">✗</button>
                             </form>
-                            <span class="unset-label" th:unless="${data.recruitmentTime}">unset</span>
+                            <span class="unset-label" th:unless="${data.eventTime}">unset</span>
                         </div>
+                    </td>
+                    <td>
+                        <form action="/update" method="post" class="inline-form">
+                            <input type="hidden" name="id" th:value="${data.id}">
+                            <input type="hidden" name="dilithium" class="dilithium-value">
+                            <input type="text" 
+                                   value="10000"
+                                   th:value="${#numbers.formatDecimal(data.dilithium, 0, 'COMMA', 0, 'POINT')}" 
+                                   min="0"
+                                   onchange="var v=this.value.replace(/,/g,''); this.previousElementSibling.value=Math.round(v); this.value=Number(v).toLocaleString('de-DE')"
+                                   class="lcars-input dilithium-input">
+                        </form>
                     </td>
                     <td>
                         <div class="timestamp-cell">
@@ -94,27 +95,32 @@
                         <div class="timestamp-cell">
                             <form action="/timestamp" method="post" class="timestamp-form">
                                 <input type="hidden" name="id" th:value="${data.id}">
-                                <input type="hidden" name="type" value="event">
+                                <input type="hidden" name="type" value="recruitment">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
-                            <div class="timestamp-info" th:if="${data.eventTime}">
-                                <span class="countdown" th:data-timestamp="${data.eventTime}" data-type="event">--:--</span>
-                                <span class="last-updated" th:text="${#temporals.format(data.eventTime, 'HH:mm')}">--:--</span>
+                            <div class="timestamp-info" th:if="${data.recruitmentTime}">
+                                <span class="countdown" th:data-timestamp="${data.recruitmentTime}" data-type="recruitment">--:--</span>
+                                <span class="last-updated" th:text="${#temporals.format(data.recruitmentTime, 'HH:mm')}">--:--</span>
                             </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
-                                  th:if="${data.eventTime}">
+                                  th:if="${data.recruitmentTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
-                                <input type="hidden" name="type" value="event">
+                                <input type="hidden" name="type" value="recruitment">
                                 <button type="submit" class="lcars-btn timestamp-btn unset-btn">✗</button>
                             </form>
-                            <span class="unset-label" th:unless="${data.eventTime}">unset</span>
+                            <span class="unset-label" th:unless="${data.recruitmentTime}">unset</span>
                         </div>
                     </td>
                     <td>
-                        <form action="/delete" method="post" class="delete-form"
-                              onsubmit="return confirm('Delete ' + this.querySelector('input[name=name]').value + '?')">
-                            <input type="hidden" name="name" th:value="${data.name}">
-                            <button type="submit" class="lcars-btn delete-btn">X</button>
+                        <form action="/update" method="post" class="inline-form">
+                            <input type="hidden" name="id" th:value="${data.id}">
+                            <input type="hidden" name="credits" class="credits-value">
+                            <input type="text" 
+                                   value="10000"
+                                   th:value="${#numbers.formatDecimal(data.credits, 0, 'COMMA', 0, 'POINT')}" 
+                                   min="0"
+                                   onchange="var v=this.value.replace(/,/g,''); this.previousElementSibling.value=Math.round(v); this.value=Number(v).toLocaleString('de-DE')"
+                                   class="lcars-input credits-input">
                         </form>
                     </td>
                 </tr>

@@ -14,15 +14,22 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - **HTML/CSS/JS** (frontend with LCARS styling)
 
 ## Features
-- Main page displays: `name | dilithium | credits | recruitment | convertion | event | delete`
+- Main page displays: `delete | name | event | dilithium | convertion | recruitment | credits`
 - Name column is readonly
 - Header contains add new name form
 - Footer shows current time (HH:mm CET, updated live)
-- Credits and dilithium are numeric input fields
+- Credits and dilithium are numeric input fields with German number format:
+  - Display: 10.000 for ten thousand (toLocaleString 'de-DE')
+  - Input: accepts both 10.000 and 10000 formats
+  - onchange handler strips thousand separators before submitting numeric value
 - Recruitment, Convertion, Event timestamps:
   - Green checkmark (✓) button to SET timestamp
   - Red X (✗) button to UNSET timestamp
-  - Time displayed between buttons when set
+  - Countdown timer displayed between buttons when set
+  - Recruitment: countdown from timestamp + 20 minutes
+  - Convertion/Event: countdown to 02:00 tomorrow CET
+  - "overdue" shown in red when timer < 0
+  - Last updated time shown smaller on second line
   - "unset" label shown when not set
 - Delete column with X button (requires confirmation)
 - Data sorted alphabetically by name
@@ -182,6 +189,7 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 
 ## Pending Tasks
 - [ ] Integration tests for all frontend controller endpoints
+- [ ] Fix typo: "convertion" → "conversion" throughout codebase
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)
