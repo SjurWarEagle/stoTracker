@@ -87,7 +87,7 @@ html, body {
 
 /* LCARS Sidebar Frame */
 .lcars-border {
-    width: 80px;
+    width: 100px;
     min-height: 100vh;
     background: var(--lcars-bg);
     display: flex;
@@ -106,7 +106,7 @@ html, body {
 /* Top elbow panel - the signature LCARS rounded corner */
 .lcars-frame-elbow {
     width: 100%;
-    height: 100px;
+    height: 80px;
     background: var(--lcars-panel);
     position: relative;
 }
@@ -116,52 +116,56 @@ html, body {
     content: '';
     position: absolute;
     bottom: 0;
-    right: -20px;
-    width: 40px;
-    height: 40px;
+    right: -25px;
+    width: 50px;
+    height: 50px;
     background: var(--lcars-bg);
-    border-radius: 0 20px 0 0;
+    border-radius: 0 25px 0 0;
 }
 
 /* Label text inside elbow */
 .lcars-frame-elbow .lcars-frame-label {
     color: var(--lcars-bg);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    letter-spacing: 2px;
-    margin-left: 8px;
-    margin-top: 8px;
+    letter-spacing: 3px;
+    margin-left: 10px;
+    margin-top: 10px;
 }
 
-/* Block section panels */
+/* Block section panels - all same height, stacked */
 .lcars-frame-block {
     width: 100%;
-    height: 60px;
-    background: var(--lcars-panel);
-    margin-top: 8px;
-    border-radius: 0 10px 10px 0;
+    height: 45px;
+    margin-top: 6px;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    align-items: center;
 }
 
 .lcars-frame-block .lcars-frame-label {
     color: var(--lcars-bg);
-    font-size: 14px;
+    font-size: 11px;
     font-weight: bold;
-    letter-spacing: 2px;
-    opacity: 0.9;
+    letter-spacing: 1px;
+    opacity: 0.95;
+    padding-left: 8px;
 }
 
-/* Bottom block - different shade */
-.lcars-frame-block-bottom {
-    background: var(--lcars-panel-dark);
-    margin-top: 8px;
-}
+/* Colored block variations */
+.lcars-frame-block-blue { background: var(--lcars-blue); }
+.lcars-frame-block-purple { background: var(--lcars-purple); }
+.lcars-frame-block-green { background: var(--lcars-green); }
+.lcars-frame-block-accent { background: var(--lcars-accent); }
+.lcars-frame-block-dark { background: var(--lcars-panel-dark); }
+.lcars-frame-block-red { background: var(--lcars-red); }
 
 /* Filler area with vertical accent */
 .lcars-frame-filler {
     flex: 1;
     width: 100%;
     position: relative;
-    min-height: 100px;
+    min-height: 80px;
 }
 
 /* Vertical accent stripe on right side of filler */
@@ -170,7 +174,7 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 8px;
+    width: 10px;
     height: 100%;
     background: linear-gradient(180deg,
         var(--lcars-panel) 0%,
@@ -183,13 +187,13 @@ html, body {
 .lcars-frame-filler::after {
     content: '';
     position: absolute;
-    top: 20px;
-    right: 12px;
-    width: 40px;
+    top: 15px;
+    right: 14px;
+    width: 50px;
     height: 2px;
     background: var(--lcars-panel);
-    box-shadow: 0 30px 0 var(--lcars-panel), 0 60px 0 var(--lcars-panel);
-    opacity: 0.5;
+    box-shadow: 0 25px 0 var(--lcars-panel), 0 50px 0 var(--lcars-panel);
+    opacity: 0.4;
 }
 
 /* Main Content Area */
@@ -717,15 +721,23 @@ html, body {
 
 @media (max-width: 1024px) {
     .lcars-border {
-        width: 60px;
+        width: 80px;
     }
 
     .lcars-frame-elbow {
-        height: 80px;
+        height: 70px;
+    }
+
+    .lcars-frame-elbow .lcars-frame-label {
+        font-size: 16px;
     }
 
     .lcars-frame-block {
-        height: 50px;
+        height: 40px;
+    }
+
+    .lcars-frame-block .lcars-frame-label {
+        font-size: 10px;
     }
 
     .lcars-header-panel {
