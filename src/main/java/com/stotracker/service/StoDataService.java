@@ -22,6 +22,9 @@ public class StoDataService {
         return Result.ok(repository.findAllByOrderByNameAsc());
     }
 
+    private static final int MAX_NAME_LENGTH = 50;
+    private static final int MAX_VALUE = Integer.MAX_VALUE;
+
     @Transactional
     public Result<StoData> addName(String name) {
         if (name == null || name.isBlank()) {
@@ -29,6 +32,10 @@ public class StoDataService {
         }
 
         String trimmedName = name.trim();
+
+        if (trimmedName.length() > MAX_NAME_LENGTH) {
+            return Result.err("Name cannot exceed " + MAX_NAME_LENGTH + " characters");
+        }
 
         if (repository.findByName(trimmedName).isPresent()) {
             return Result.err("Name already exists");
@@ -43,6 +50,14 @@ public class StoDataService {
         Optional<StoData> optData = repository.findById(id);
         if (optData.isEmpty()) {
             return Result.err("Record not found");
+        }
+
+        if (dilithium != null && (dilithium < 0 || dilithium > MAX_VALUE)) {
+            return Result.err("Dilithium must be between 0 and " + MAX_VALUE);
+        }
+
+        if (credits != null && (credits < 0 || credits > MAX_VALUE)) {
+            return Result.err("Credits must be between 0 and " + MAX_VALUE);
         }
 
         StoData data = optData.get();

@@ -114,6 +114,35 @@ class StoDataServiceTest {
     }
 
     @Test
+    void addName_withTooLongName_fails() {
+        // Arrange
+        String longName = "a".repeat(51);
+        // Note: No stubbing needed - validation fails before database lookup
+
+        // Act
+        Result<StoData> result = service.addName(longName);
+
+        // Assert
+        assertFalse(result.success());
+        assertTrue(result.error().contains("cannot exceed"));
+    }
+
+    @Test
+    void addName_withMaxLengthName_succeeds() {
+        // Arrange
+        String maxName = "a".repeat(50);
+        when(repository.findByName(maxName)).thenReturn(Optional.empty());
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.addName(maxName);
+
+        // Assert
+        assertTrue(result.success());
+        assertEquals(maxName, result.data().getName());
+    }
+
+    @Test
     void updateData_withValidId_updatesFields() {
         // Arrange
         Long id = 1L;
@@ -147,23 +176,87 @@ class StoDataServiceTest {
     }
 
     @Test
-    void updateData_ignoresNegativeValues() {
+    void updateData_withNegativeDilithium_fails() {
         // Arrange
         Long id = 1L;
         StoData existing = new StoData("Char");
         existing.setId(id);
-        existing.setDilithium(100);
-        existing.setCredits(500);
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+
+        // Act
+        Result<StoData> result = service.updateData(id, -50, null);
+
+        // Assert
+        assertFalse(result.success());
+        assertTrue(result.error().contains("Dilithium must be between"));
+    }
+
+    @Test
+    void updateData_withNegativeCredits_fails() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+
+        // Act
+        Result<StoData> result = service.updateData(id, null, -100);
+
+        // Assert
+        assertFalse(result.success());
+        assertTrue(result.error().contains("Credits must be between"));
+    }
+
+    @Test
+    void updateData_withExcessiveDilithium_fails() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+
+        // Act - use a value that overflows when treated as Integer
+        int excessiveValue = (int) Integer.MAX_VALUE + 1; // This wraps to a negative
+        Result<StoData> result = service.updateData(id, excessiveValue, null);
+
+        // Assert
+        assertFalse(result.success());
+        assertTrue(result.error().contains("Dilithium must be between"));
+    }
+
+    @Test
+    void updateData_withExcessiveCredits_fails() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+
+        // Act - use a value that overflows when treated as Integer
+        int excessiveValue = (int) Integer.MAX_VALUE + 1; // This wraps to a negative
+        Result<StoData> result = service.updateData(id, null, excessiveValue);
+
+        // Assert
+        assertFalse(result.success());
+        assertTrue(result.error().contains("Credits must be between"));
+    }
+
+    @Test
+    void updateData_withMaxValues_succeeds() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
         when(repository.findById(id)).thenReturn(Optional.of(existing));
         when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // Act
-        Result<StoData> result = service.updateData(id, -50, -100);
+        Result<StoData> result = service.updateData(id, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         // Assert
         assertTrue(result.success());
-        assertEquals(100, result.data().getDilithium()); // Unchanged
-        assertEquals(500, result.data().getCredits()); // Unchanged
+        assertEquals(Integer.MAX_VALUE, result.data().getDilithium());
+        assertEquals(Integer.MAX_VALUE, result.data().getCredits());
     }
 
     @Test
