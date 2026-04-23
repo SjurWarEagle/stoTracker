@@ -1,7 +1,7 @@
 # stoTracker - Task Plan
 
 ## Overview
-Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-styled HTML frontend for tracking character data.
+Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-styled HTML frontend for tracking Star Trek Online character data.
 
 ## Tech Stack
 - **Java 21**
@@ -18,10 +18,10 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - Name column is readonly
 - Header contains add new name form
 - Footer shows current time (HH:mm CET, updated live)
-- Credits and dilithium are numeric input fields with native browser number formatting:
-  - Browser handles locale-based display (type="number")
+- Credits and dilithium are numeric input fields with German number formatting:
+  - Input uses `type="text"` with JavaScript parseGermanNumber() for German format (10.000)
   - Hidden inputs carry raw integer values for form submission
-  - onchange handler passes raw value to hidden input before submit
+  - onchange handler parses German number format before submit
 - Recruitment, Refining, Event timestamps:
   - Green checkmark (✓) button to SET timestamp
   - Red X (✗) button to UNSET timestamp
@@ -125,26 +125,27 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 
 - [x] **Task 12:** Fix number input handling
   - Files: `src/main/resources/static/js/time.js`, `src/main/resources/templates/index.html`
-  - Remove JS-based German number formatting (formatGermanNumber, parseGermanNumber, initNumberInputs)
-  - Use native `<input type="number">` - browser handles locale display
-  - Hidden inputs carry raw integer values
-  - Verification: Enter `34780` in dilithium field, submit, DB stores `34780`
+  - Use `type="text"` with JavaScript parseGermanNumber() for German number formatting
+  - parseGermanNumber() accepts 10.000 (German), 10,000 (American), or 10000 formats
+  - Hidden inputs carry raw integer values for form submission
+  - Verification: Enter `34.780` in dilithium field, submit, DB stores `34780`
 
-- [x] **Task 13:** Selenium Chrome browser integration test
+- [x] **Task 13:** Selenium Firefox browser integration test
   - File: `src/test/java/com/stotracker/controller/StoControllerBrowserTest.java`
   - Creates character "unit-char", updates numbers, sets/unset timestamps, verifies DB, deletes
   - Tests both German (de-DE) and American (en-US) locale formatting
-  - Dependency: `selenium-chrome-driver` 4.16.0, `webdrivermanager` 5.6.2
-  - Runs against embedded test server on port 4545
+  - Dependency: `selenium-firefox-driver` 4.16.0, `webdrivermanager` 5.6.2
+  - Uses RANDOM_PORT for test server to avoid port conflicts
   - Verification: `mvn test -Dtest=StoControllerBrowserTest` passes
 
 - [x] **Task 14:** Comprehensive test coverage
-  - Files: Added `ResultTest.java`, `StoDataTest.java`, extended `StoControllerIntegrationTest.java`
+  - Files: Added `ResultTest.java`, `StoDataTest.java`, extended `StoControllerIntegrationTest.java`, `StoControllerBrowserTest.java`
   - Service layer: 26 tests covering all methods including clearTimestamp, refining alias, updatedAt
   - Controller layer: 20 integration tests covering error handling for invalid/non-existent IDs
   - Model layer: 10 unit tests for StoData entity
   - Result record: 5 unit tests
-  - Verification: All 61 backend tests pass
+  - Browser layer: 5 Firefox browser tests for full UI workflow
+  - Verification: All 66 tests pass
 
 ## File Structure
 ```
@@ -216,8 +217,8 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [x] No database remains after character deletion
 
 ## Pending Tasks
-- [x] Fix number input handling - remove JS formatting, use native `<input type="number">` (Task 12)
-- [x] Add Selenium Chrome browser integration test (Task 13)
+- [x] Fix number input handling with German format parsing (Task 12)
+- [x] Add Selenium Firefox browser integration test (Task 13)
 - [x] Comprehensive test coverage - backend, frontend, integration (Task 14)
 - [ ] Rename "convertion" to "refining" in database schema, model, and service layer
 - [ ] Add input validation (name max length, dilithium/credits max bounds)
