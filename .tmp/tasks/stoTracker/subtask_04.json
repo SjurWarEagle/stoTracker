@@ -1,0 +1,21 @@
+{
+  "id": "stoTracker-04",
+  "seq": "04",
+  "title": "Create Spring Data JPA repository",
+  "status": "pending",
+  "depends_on": ["03"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "StoDataRepository extends JpaRepository",
+    "Repository includes custom query to find most recent entry by name",
+    "Repository includes method to delete by name (removes all associated data)"
+  ],
+  "deliverables": [
+    "src/main/java/com/stotracker/repository/StoDataRepository.java"
+  ]
+}

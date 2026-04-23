@@ -1,0 +1,22 @@
+{
+  "id": "stoTracker-02",
+  "seq": "02",
+  "title": "Design and create SQLite database schema",
+  "status": "pending",
+  "depends_on": ["01"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "schema.sql creates sto_data table with: id, name, dilithium, credits, recruitment_time, convertion_time, event_time, created_at",
+    "Schema initializes with SQLite PRAGMA settings for foreign keys",
+    "Database auto-creates on startup"
+  ],
+  "deliverables": [
+    "src/main/resources/schema.sql",
+    "src/main/resources/data.sql"
+  ]
+}

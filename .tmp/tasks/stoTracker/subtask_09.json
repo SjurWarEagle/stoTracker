@@ -1,0 +1,23 @@
+{
+  "id": "stoTracker-09",
+  "seq": "09",
+  "title": "Configure git pre-commit hook to run tests",
+  "status": "pending",
+  "depends_on": ["08"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/test-coverage.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "pre-commit hook file exists at .git/hooks/pre-commit",
+    "Hook runs ./gradlew test before commit",
+    "Hook exits with non-zero status if tests fail",
+    "Hook blocks commit when tests fail",
+    "Hook allows commit when tests pass"
+  ],
+  "deliverables": [
+    ".git/hooks/pre-commit"
+  ]
+}

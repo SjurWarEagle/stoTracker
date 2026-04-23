@@ -1,0 +1,23 @@
+{
+  "id": "stoTracker-03",
+  "seq": "03",
+  "title": "Create JPA entity for sto_data table",
+  "status": "pending",
+  "depends_on": ["02"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "StoData entity maps to sto_data table",
+    "All fields: id, name, dilithium, credits, recruitmentTime, convertionTime, eventTime, createdAt",
+    "Timestamps stored as LocalDateTime",
+    "Entity uses @Table annotation",
+    "Name field has @Column(updatable=false) for readonly behavior"
+  ],
+  "deliverables": [
+    "src/main/java/com/stotracker/entity/StoData.java"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "stoTracker-08",
+  "seq": "08",
+  "title": "Write JUnit unit tests for service layer",
+  "status": "pending",
+  "depends_on": ["05"],
+  "parallel": true,
+  "context_files": [
+    ".opencode/context/core/standards/test-coverage.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "TestEngineer",
+  "acceptance_criteria": [
+    "Tests follow AAA pattern (Arrange, Act, Assert)",
+    "Unit tests for StoDataService: addEntry, updateCredits, recordRecruitment, recordConvertion, recordEvent, deleteByName, getAllEntries",
+    "Tests use mock repository with Mockito",
+    "Tests verify timestamp recording behavior",
+    "Tests verify delete removes all entries by name",
+    "All tests pass with ./gradlew test"
+  ],
+  "deliverables": [
+    "src/test/java/com/stotracker/service/StoDataServiceTest.java"
+  ]
+}

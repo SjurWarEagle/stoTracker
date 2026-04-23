@@ -1,0 +1,30 @@
+{
+  "id": "stoTracker-07",
+  "seq": "07",
+  "title": "Create Thymeleaf templates with LCARS styling",
+  "status": "pending",
+  "depends_on": ["06"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "OpenFrontendSpecialist",
+  "acceptance_criteria": [
+    "index.html with LCARS color scheme (orange/cream/dark blue)",
+    "Header section: add new name form with name input and submit button",
+    "Main table displays: name|dilithium|credits|recruitment|convertion|event columns",
+    "Name column is readonly (display only, not editable)",
+    "Remove button per row with onclick confirmation dialog",
+    "Credits field is numeric input (type=number)",
+    "Recruitment/Convertion/Event are buttons that POST timestamps",
+    "Footer displays current time in HH:mm format (updates via JavaScript)",
+    "Responsive design at all breakpoints",
+    "Follows LCARS design patterns"
+  ],
+  "deliverables": [
+    "src/main/resources/templates/index.html",
+    "src/main/resources/static/css/lcars.css",
+    "src/main/resources/static/js/time.js"
+  ]
+}

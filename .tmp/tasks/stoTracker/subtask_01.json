@@ -1,0 +1,25 @@
+{
+  "id": "stoTracker-01",
+  "seq": "01",
+  "title": "Create Spring Boot project structure and build configuration",
+  "status": "pending",
+  "depends_on": [],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "build.gradle exists with Java 21, Spring Boot 3.x, Thymeleaf, SQLite dependencies",
+    "Main application class with @SpringBootApplication annotation",
+    "application.properties configures SQLite database",
+    "Project compiles with ./gradlew build"
+  ],
+  "deliverables": [
+    "build.gradle",
+    "settings.gradle",
+    "src/main/java/com/stotracker/StoTrackerApplication.java",
+    "src/main/resources/application.properties"
+  ]
+}

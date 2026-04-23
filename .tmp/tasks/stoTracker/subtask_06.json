@@ -1,0 +1,22 @@
+{
+  "id": "stoTracker-06",
+  "seq": "06",
+  "title": "Create Spring MVC controller with Thymeleaf",
+  "status": "pending",
+  "depends_on": ["05"],
+  "parallel": false,
+  "context_files": [
+    ".opencode/context/core/standards/code-quality.md"
+  ],
+  "reference_files": [],
+  "suggested_agent": "CoderAgent",
+  "acceptance_criteria": [
+    "StoController handles GET / and POST /add, /update, /delete, /recordRecruitment, /recordConvertion, /recordEvent",
+    "Model populates with most recent data per name on load",
+    "All endpoints redirect to home after POST",
+    "Delete endpoint accepts name parameter"
+  ],
+  "deliverables": [
+    "src/main/java/com/stotracker/controller/StoController.java"
+  ]
+}
