@@ -57,7 +57,10 @@
                                 <input type="hidden" name="type" value="recruitment">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
-                            <span class="timestamp-value" th:if="${data.recruitmentTime}" th:text="${#temporals.format(data.recruitmentTime, 'HH:mm')}">--:--</span>
+                            <div class="timestamp-info" th:if="${data.recruitmentTime}">
+                                <span class="countdown" th:data-timestamp="${data.recruitmentTime}" data-type="recruitment">--:--</span>
+                                <span class="last-updated" th:text="${#temporals.format(data.recruitmentTime, 'HH:mm')}">--:--</span>
+                            </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
                                   th:if="${data.recruitmentTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
@@ -74,7 +77,10 @@
                                 <input type="hidden" name="type" value="convertion">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
-                            <span class="timestamp-value" th:if="${data.convertionTime}" th:text="${#temporals.format(data.convertionTime, 'HH:mm')}">--:--</span>
+                            <div class="timestamp-info" th:if="${data.convertionTime}">
+                                <span class="countdown" th:data-timestamp="${data.convertionTime}" data-type="convertion">--:--</span>
+                                <span class="last-updated" th:text="${#temporals.format(data.convertionTime, 'HH:mm')}">--:--</span>
+                            </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
                                   th:if="${data.convertionTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
@@ -91,7 +97,10 @@
                                 <input type="hidden" name="type" value="event">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
-                            <span class="timestamp-value" th:if="${data.eventTime}" th:text="${#temporals.format(data.eventTime, 'HH:mm')}">--:--</span>
+                            <div class="timestamp-info" th:if="${data.eventTime}">
+                                <span class="countdown" th:data-timestamp="${data.eventTime}" data-type="event">--:--</span>
+                                <span class="last-updated" th:text="${#temporals.format(data.eventTime, 'HH:mm')}">--:--</span>
+                            </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
                                   th:if="${data.eventTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
