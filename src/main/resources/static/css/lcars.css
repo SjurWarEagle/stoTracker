@@ -1,5 +1,62 @@
 /* LCARS-inspired Styling for StarTrekOnline 🖖 - Daily Tasks */
 /* Based on LCARS® Design by Michael Okuda - theelcars.com */
+/* Using LCARS v24.2 Classic Theme variables */
+
+@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap');
+
+/* ===========================
+   LCARS v24.2 VARIABLES
+   =========================== */
+
+:root {
+    /* LCARS v24.2 Official Colors */
+    --african-violet: #c9f;
+    --almond: #ffaa90;
+    --almond-creme: #fba;
+    --blue: #56f;
+    --bluey: #89f;
+    --butterscotch: #f96;
+    --gold: #fa0;
+    --golden-orange: #f90;
+    --gray: #668;
+    --green: #993;
+    --ice: #9cf;
+    --lilac: #c5f;
+    --lima-bean: #cc6;
+    --magenta: #c59;
+    --mars: #f20;
+    --moonlit-violet: #96f;
+    --orange: #f80;
+    --peach: #f86;
+    --red: #c44;
+    --sky: #aaf;
+    --space-white: #f5f6fa;
+    --sunflower: #fc9;
+    --tomato: #f55;
+    --violet-creme: #dbf;
+
+    /* LCARS Layout Variables */
+    --lfw: 240px;
+    --left-frame-top-color: var(--bluey);
+    --left-frame-color: var(--red);
+    --left-frame-padding: .75rem;
+    --corner-color-top: var(--bluey);
+    --corner-color-bottom: var(--red);
+    --panel-border: .25rem solid black;
+    --bar-border: .25rem solid black;
+    --bar-height: 28px;
+    --nav-width: 240px;
+    --button-color-sidebar: var(--red);
+    --panel-4-color: var(--red);
+    --panel-5-color: var(--orange);
+    --panel-6-color: var(--butterscotch);
+    --panel-7-color: var(--bluey);
+    --panel-8-color: var(--butterscotch);
+    --panel-10-color: var(--orange);
+    --panel-top-button-color: var(--african-violet);
+    --radius-top: 0 0 0 160px;
+    --radius-bottom: 160px 0 0 0;
+}
 
 /* ===========================
    LCARS THEMES
@@ -78,37 +135,295 @@ html, body {
 
 /* ===========================
    LCARS SIDEBAR FRAME - LEFT SIDE
+   Based on LCARS v24.2
    =========================== */
 
 .lcars-wrapper {
     display: flex;
     min-height: 100vh;
+    background: transparent;
 }
 
-/* LCARS Sidebar Frame */
-.lcars-border {
-    width: 110px;
-    min-height: 100vh;
-    background: var(--lcars-bg);
+/* Left Frame - Main Sidebar */
+.left-frame,
+.left-frame-top {
+    width: var(--lfw);
+    text-align: right;
+    font-size: clamp(.875rem, 2vw, 1rem);
+    line-height: 1.2;
+    font-weight: bold;
+    color: black;
+    transition: width 1s;
+}
+
+.left-frame-top {
+    background-color: var(--left-frame-top-color);
+    border-radius: var(--radius-top);
+}
+
+.left-frame-top a,
+.left-frame a {
+    text-decoration: none;
+    color: black;
+}
+
+.left-frame {
     display: flex;
     flex-direction: column;
-    position: relative;
+    background-color: transparent;
+    border-radius: var(--radius-bottom);
+}
+
+.panel-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0;
     padding: 0;
 }
 
-/* Top elbow panel - the signature LCARS rounded corner */
-.lcars-frame-elbow {
-    width: 100%;
-    height: 90px;
-    background: var(--lcars-panel);
-    position: relative;
+.panel-group > * {
+    flex: 1;
+    margin: 0;
+    padding: var(--left-frame-padding);
 }
 
-/* Rounded corner cutout at bottom-right */
-.lcars-frame-elbow::after {
+#topBtn {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    z-index: 99;
+    border-radius: 0;
+    border-top: var(--panel-border);
+    border-right: none;
+    border-bottom: var(--panel-border);
+    border-left: none;
+    outline: none;
+    width: var(--lfw);
+    padding: var(--left-frame-padding);
+    padding-bottom: 10vh;
+    background-color: var(--panel-top-button-color);
+    text-align: right;
+    line-height: 1;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: black;
+    cursor: pointer;
+}
+
+/* LCARS Panels */
+.panel-3,
+.panel-4,
+.panel-5,
+.panel-6,
+.panel-7,
+.panel-8,
+.panel-9,
+.panel-10,
+.panel-11,
+.panel-12,
+.panel-13,
+.panel-14 {
+    width: 100%;
+    border-bottom: var(--panel-border);
+}
+
+.panel-3,
+.panel-4,
+.panel-6,
+.panel-7,
+.panel-8,
+.panel-10,
+.panel-11,
+.panel-12,
+.panel-13,
+.panel-14 {
+    padding: var(--left-frame-padding);
+}
+
+.panel-9 {
+    height: 7vh;
+    max-height: 100px;
+    background-color: var(--panel-6-color);
+}
+
+/* Panel 0 - top header panel */
+.panel-0 {
+    width: 100%;
+    height: 100px;
+    background-color: var(--left-frame-top-color);
+    border-radius: 100px 0 0 0;
+}
+
+.panel-3,
+.panel-4,
+.panel-6,
+.panel-7,
+.panel-8,
+.panel-10 {
+    padding: var(--left-frame-padding);
+}
+
+.panel-4 {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    background-color: var(--panel-4-color);
+}
+
+.panel-5 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: var(--panel-5-color);
+}
+
+.panel-6 {
+    background-color: var(--african-violet);
+}
+
+.panel-7 {
+    background-color: var(--panel-7-color);
+}
+
+.panel-8 {
+    background-color: var(--almond);
+}
+
+.panel-9 {
+    background-color: var(--lilac);
+}
+
+.panel-10 {
+    height: 81px;
+    flex-shrink: 0;
+    border-top: var(--panel-border);
+    background-color: var(--gold);
+}
+
+.panel-11 {
+    background-color: var(--moonlit-violet);
+}
+
+.panel-12 {
+    background-color: var(--almond-creme);
+}
+
+.panel-13 {
+    background-color: var(--sky);
+}
+
+.panel-build-info {
+    background-color: var(--panel-5-color);
+    flex-shrink: 0;
+}
+
+/* Panel 0 - top header panel */
+.panel-0 {
+    flex-shrink: 0;
+}
+
+/* Half panels for 03 */
+.panel-3 {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    background-color: var(--blue);
+    color: black;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Sidebar Header - horizontal panel at top */
+.sidebar-header {
+    width: 100%;
+    min-height: 100px;
+    background: var(--left-frame-top-color);
+    border-radius: 0 0 160px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    padding: var(--left-frame-padding);
+    margin-bottom: 8px;
+}
+
+.sidebar-header-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.sidebar-header-subtitle {
+    font-size: 0.85rem;
+    color: black;
+    opacity: 0.8;
+}
+
+/* Vertical accent stripe on right side of filler */
+.lcars-frame-filler {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    min-height: 60px;
+}
+
+.lcars-frame-filler::before {
     content: '';
     position: absolute;
-    bottom: 0;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    background: linear-gradient(180deg,
+        var(--left-frame-top-color) 0%,
+        var(--left-frame-top-color) 30%,
+        black 30%,
+        black 70%,
+        var(--left-frame-top-color) 70%,
+        var(--left-frame-top-color) 100%);
+}
+
+/* ===========================
+   LCARS SIDEBAR NAV BUTTONS
+   Based on LCARS v24.2
+   =========================== */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1;
+    gap: 4px;
+}
+
+.sidebar-nav button,
+.sidebar-nav a {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex: 1;
+    min-height: 60px;
+    width: 100%;
+    background-color: var(--left-frame-top-color);
+    border-radius: 0;
+    border-bottom: var(--panel-border);
+    padding: var(--left-frame-padding);
+    text-decoration: none;
+    text-align: right;
+    word-break: break-all;
+    text-transform: uppercase;
+    color: black;
+    font-family: 'Antonio', 'Arial Narrow', 'Avenir Next Condensed', sans-serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.sidebar-nav button:first-child {
+    border-radius: 0 20px 0 0;
+}
     right: -30px;
     width: 60px;
     height: 60px;
@@ -194,6 +509,49 @@ html, body {
     opacity: 0.4;
 }
 
+/* ===========================
+   LCARS SIDEBAR NAV BUTTONS
+   Based on LCARS v24.2
+   =========================== */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1;
+    gap: 4px;
+}
+
+.sidebar-nav button,
+.sidebar-nav a {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex: 1;
+    min-height: 60px;
+    width: 100%;
+    background-color: var(--left-frame-top-color);
+    border-radius: 0;
+    border-bottom: var(--panel-border);
+    padding: var(--left-frame-padding);
+    text-decoration: none;
+    text-align: right;
+    word-break: break-all;
+    text-transform: uppercase;
+    color: black;
+    font-family: 'Antonio', 'Arial Narrow', 'Avenir Next Condensed', sans-serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.sidebar-nav button:first-child {
+    border-radius: 0 20px 0 0;
+}
+
+.sidebar-nav button:last-child {
+    margin-bottom: 0;
+}
+
 /* Main Content Area */
 .lcars-content {
     flex: 1;
@@ -206,12 +564,12 @@ html, body {
    =========================== */
 
 .lcars-header {
-    background-color: var(--lcars-dark);
+    background-color: var(--left-frame-color);
     padding: 0;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    border-bottom: 3px solid var(--lcars-panel);
+    border-bottom: 3px solid var(--left-frame-top-color);
     position: relative;
 }
 
@@ -224,24 +582,12 @@ html, body {
 /* The LCARS header panel block */
 .lcars-header-panel {
     background: var(--lcars-panel);
-    padding: 20px 40px 20px 25px;
+    padding: var(--left-frame-padding);
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
     min-width: 220px;
-}
-
-/* Rounded corner at bottom-right of header panel */
-.lcars-header-panel::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    right: -50px;
-    width: 50px;
-    height: calc(100% + 3px);
-    background: var(--lcars-panel);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 50px 100%, 0 calc(100% - 50px));
 }
 
 .lcars-header-title {
@@ -264,7 +610,13 @@ html, body {
 .add-form {
     display: flex;
     align-items: center;
-    margin-left: 60px;
+}
+
+.table-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 0;
+    margin-top: 15px;
 }
 
 .add-form input {
@@ -314,16 +666,16 @@ html, body {
 }
 
 .theme-selector label {
-    color: var(--lcars-text-dim);
+    color: var(--left-frame-top-color);
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .theme-selector select {
-    background: var(--lcars-darker);
-    color: var(--lcars-text);
-    border: 2px solid var(--lcars-panel);
+    background: var(--bluey);
+    color: black;
+    border: 2px solid var(--butterscotch);
     padding: 8px 15px;
     border-radius: 20px 5px 5px 20px;
     font-size: 14px;
@@ -333,7 +685,7 @@ html, body {
 
 .theme-selector select:hover,
 .theme-selector select:focus {
-    border-color: var(--lcars-accent);
+    border-color: var(--african-violet);
 }
 
 .theme-selector select option {
@@ -792,10 +1144,6 @@ html, body {
     .lcars-header-panel {
         min-width: unset;
         width: fit-content;
-    }
-
-    .lcars-header-panel::after {
-        display: none;
     }
 
     .add-form {

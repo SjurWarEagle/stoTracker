@@ -10,51 +10,22 @@
 <body>
     <div class="lcars-wrapper">
         <!-- LCARS Sidebar Frame - Left Side -->
-        <aside class="lcars-border">
-            <!-- Top elbow panel -->
-            <div class="lcars-frame-section lcars-frame-elbow">
-                <div class="lcars-frame-label">STO</div>
+        <aside class="left-frame">
+            <div class="panel-0"></div>
+            <div class="panel-group">
+                <div class="panel-3 lcars-clock" id="clock">--:--</div>
+                <div class="panel-4">04<span class="hop">-041969</span></div>
+                <div class="panel-5">05<span class="hop">-1701D</span></div>
+                <div class="panel-6">06<span class="hop">-071984</span></div>
+                <div class="panel-7">07<span class="hop">-081940</span></div>
+                <div class="panel-8">08<span class="hop">-47148</span></div>
+                <div class="panel-9">09<span class="hop">-081966</span></div>
+                <div class="panel-10">10<span class="hop">-47148</span></div>
+                <div class="panel-11">11<span class="hop">-47148</span></div>
+                <div class="panel-12">12<span class="hop">-47148</span></div>
+                <div class="panel-13">13<span class="hop">-47148</span></div>
             </div>
-            <!-- Panel blocks with varying heights -->
-            <div class="lcars-frame-block lcars-frame-block-blue" style="height: 70px;">
-                <div class="lcars-frame-label">TRK-01</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-purple" style="height: 50px;">
-                <div class="lcars-frame-label">DIL-02</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-green" style="height: 60px;">
-                <div class="lcars-frame-label">EVT-03</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-accent" style="height: 45px;">
-                <div class="lcars-frame-label">CRD-04</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-red" style="height: 55px;">
-                <div class="lcars-frame-label">REC-05</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-orange" style="height: 40px;">
-                <div class="lcars-frame-label">REF-06</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-teal" style="height: 65px;">
-                <div class="lcars-frame-label">SCI-07</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-pink" style="height: 48px;">
-                <div class="lcars-frame-label">ENG-08</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-gold" style="height: 52px;">
-                <div class="lcars-frame-label">MED-09</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-dark" style="height: 58px;">
-                <div class="lcars-frame-label">SEC-10</div>
-            </div>
-            <!-- Filler with accent stripe -->
-            <div class="lcars-frame-filler"></div>
-            <!-- Bottom section blocks -->
-            <div class="lcars-frame-block lcars-frame-block-darkorange" style="height: 46px;">
-                <div class="lcars-frame-label">SYS-11</div>
-            </div>
-            <div class="lcars-frame-block lcars-frame-block-brown" style="height: 42px;">
-                <div class="lcars-frame-label">NET-12</div>
-            </div>
+            <div class="panel-build-info">v0.1</div>
         </aside>
 
         <!-- Main Content -->
@@ -66,10 +37,6 @@
                         <div class="lcars-header-title">STARFLEET</div>
                         <div class="lcars-header-subtitle">🖖 Daily Task Tracker</div>
                     </div>
-                    <form class="add-form" action="/add" method="post">
-                        <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
-                        <button type="submit" class="lcars-btn add-btn-header">ADD</button>
-                    </form>
                 </div>
                 <div class="theme-selector">
                     <label for="theme-select">THEME:</label>
@@ -214,13 +181,17 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <!-- Add Character Form - below table, right aligned -->
+                <div class="table-footer">
+                    <form class="add-form" action="/add" method="post">
+                        <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
+                        <button type="submit" class="lcars-btn add-btn-header">ADD</button>
+                    </form>
+                </div>
             </div>
 
             <!-- Footer -->
-            <footer class="lcars-footer">
-                <div class="lcars-clock" id="clock">--:--</div>
-                <span class="build-date" th:text="${buildDate}">unknown</span>
-            </footer>
         </main>
     </div>
 
