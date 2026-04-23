@@ -88,7 +88,7 @@ public class StoDataService {
                 data.setRecruitmentTime(now);
                 yield Result.ok(repository.save(data));
             }
-            case "convertion" -> {
+            case "refining", "convertion" -> {
                 data.setConvertionTime(now);
                 yield Result.ok(repository.save(data));
             }
@@ -114,7 +114,7 @@ public class StoDataService {
                 data.setRecruitmentTime(null);
                 yield Result.ok(repository.save(data));
             }
-            case "convertion" -> {
+            case "refining", "convertion" -> {
                 data.setConvertionTime(null);
                 yield Result.ok(repository.save(data));
             }
