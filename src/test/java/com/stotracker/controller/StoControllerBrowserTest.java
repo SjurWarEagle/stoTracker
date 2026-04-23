@@ -371,6 +371,120 @@ class StoControllerBrowserTest {
     }
 
     @Test
+    void themeSelector_changesDataThemeAttribute() {
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        // Verify initial theme is classic (default)
+        String initialTheme = driver.findElement(By.tagName("html"))
+                .getAttribute("data-theme");
+        assertEquals("classic", initialTheme,
+                "Initial theme should be 'classic'");
+
+        // Change to Nemesis Blue theme
+        WebElement themeSelect = driver.findElement(By.id("theme-select"));
+        themeSelect.click();
+        themeSelect.findElement(By.cssSelector("option[value='nemesis']")).click();
+        waitForPageLoad();
+
+        // Verify theme changed to nemesis
+        String nemesisTheme = driver.findElement(By.tagName("html"))
+                .getAttribute("data-theme");
+        assertEquals("nemesis", nemesisTheme,
+                "Theme should change to 'nemesis' after selection");
+
+        // Change to Lower Decks theme
+        themeSelect = driver.findElement(By.id("theme-select"));
+        themeSelect.click();
+        themeSelect.findElement(By.cssSelector("option[value='lowerdecks']")).click();
+        waitForPageLoad();
+
+        // Verify theme changed to lowerdecks
+        String lowerDecksTheme = driver.findElement(By.tagName("html"))
+                .getAttribute("data-theme");
+        assertEquals("lowerdecks", lowerDecksTheme,
+                "Theme should change to 'lowerdecks' after selection");
+    }
+
+    @Test
+    void themeSelector_changesComputedBackgroundColor() {
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        // Get body background color for Classic theme (should be black #000000)
+        String classicBgColor = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return window.getComputedStyle(document.body).backgroundColor;");
+
+        // Change to Nemesis Blue theme
+        WebElement themeSelect = driver.findElement(By.id("theme-select"));
+        themeSelect.click();
+        themeSelect.findElement(By.cssSelector("option[value='nemesis']")).click();
+        waitForPageLoad();
+
+        // Get body background color for Nemesis theme (should be dark blue #000020)
+        String nemesisBgColor = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return window.getComputedStyle(document.body).backgroundColor;");
+
+        // Verify colors are different between themes
+        assertNotEquals(classicBgColor, nemesisBgColor,
+                "Background color should change when theme changes. Classic: " + classicBgColor + ", Nemesis: " + nemesisBgColor);
+
+        // Change to Lower Decks theme
+        themeSelect = driver.findElement(By.id("theme-select"));
+        themeSelect.click();
+        themeSelect.findElement(By.cssSelector("option[value='lowerdecks']")).click();
+        waitForPageLoad();
+
+        // Get body background color for Lower Decks theme (should be dark #0a0a14)
+        String lowerDecksBgColor = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return window.getComputedStyle(document.body).backgroundColor;");
+
+        // Verify colors are different between all themes
+        assertNotEquals(nemesisBgColor, lowerDecksBgColor,
+                "Nemesis and Lower Decks should have different background colors. Nemesis: " + nemesisBgColor + ", Lower Decks: " + lowerDecksBgColor);
+    }
+
+    @Test
+    void themeSelector_persistsToLocalStorage() {
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        // Change theme to nemesis
+        WebElement themeSelect = driver.findElement(By.id("theme-select"));
+        themeSelect.click();
+        themeSelect.findElement(By.cssSelector("option[value='nemesis']")).click();
+        waitForPageLoad();
+
+        // Verify localStorage was set
+        String storedTheme = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return localStorage.getItem('lcars-theme');");
+        assertEquals("nemesis", storedTheme,
+                "Theme preference should be saved to localStorage");
+    }
+
+    @Test
+    void themeSelector_restoresFromLocalStorage() {
+        // First, set localStorage directly
+        driver.get(BASE_URL + port);
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "localStorage.setItem('lcars-theme', 'lowerdecks');");
+        driver.get(BASE_URL + port);
+        waitForPageLoad();
+
+        // Verify theme was restored from localStorage
+        String restoredTheme = driver.findElement(By.tagName("html"))
+                .getAttribute("data-theme");
+        assertEquals("lowerdecks", restoredTheme,
+                "Theme should be restored from localStorage on page load");
+
+        // Verify select shows correct value
+        WebElement themeSelect = driver.findElement(By.id("theme-select"));
+        String selectedValue = themeSelect.getAttribute("value");
+        assertEquals("lowerdecks", selectedValue,
+                "Theme selector should show the restored theme");
+    }
+
+    @Test
     void dilithiumMultiplier_updatesOnChange() {
         // Create character with initial dilithium
         createCharacter(TEST_CHAR_NAME);
