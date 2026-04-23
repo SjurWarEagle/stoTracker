@@ -21,6 +21,7 @@
     --lcars-text: #FFFFFF;
     --lcars-text-dim: #AAAAAA;
     --lcars-border: #333333;
+    --lcars-filler: #1A1A1A;
 }
 
 /* Nemesis Blue Theme */
@@ -39,6 +40,7 @@
     --lcars-text: #FFFFFF;
     --lcars-text-dim: #88AACC;
     --lcars-border: #003366;
+    --lcars-filler: #000040;
 }
 
 /* Lower Decks Theme */
@@ -57,6 +59,7 @@
     --lcars-text: #E0E0E0;
     --lcars-text-dim: #888888;
     --lcars-border: #2a2a3a;
+    --lcars-filler: #14141F;
 }
 
 /* Reset */
@@ -84,19 +87,73 @@ html, body {
 
 /* Vertical LCARS Border - Left Side */
 .lcars-border {
-    width: 60px;
+    width: 50px;
     min-height: 100vh;
-    background: var(--lcars-dark);
+    background: var(--lcars-bg);
+    display: flex;
+    flex-direction: column;
     position: relative;
-    overflow: hidden;
 }
 
-.lcars-border::before {
+/* Top section - the large orange elbow */
+.lcars-border-top {
+    width: 100%;
+    height: 120px;
+    background: var(--lcars-panel);
+    position: relative;
+}
+
+/* Rounded corner cutout */
+.lcars-border-top::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -25px;
+    width: 50px;
+    height: 50px;
+    background: var(--lcars-bg);
+    border-radius: 0 25px 0 0;
+}
+
+/* Button sections */
+.lcars-border-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 15px 5px;
+}
+
+.lcars-border-btn {
+    height: 25px;
+    border-radius: 5px;
+}
+
+.lcars-border-btn-1 { background: var(--lcars-blue); }
+.lcars-border-btn-2 { background: var(--lcars-purple); }
+.lcars-border-btn-3 { background: var(--lcars-green); }
+.lcars-border-btn-4 { background: var(--lcars-accent); }
+.lcars-border-btn-5 { background: var(--lcars-red); }
+
+/* Filler section with vertical stripes */
+.lcars-border-filler {
+    flex: 1;
+    background: repeating-linear-gradient(
+        180deg,
+        var(--lcars-filler) 0px,
+        var(--lcars-filler) 20px,
+        var(--lcars-border) 20px,
+        var(--lcars-border) 22px
+    );
+    position: relative;
+}
+
+/* Vertical accent stripe */
+.lcars-border-filler::before {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
-    width: 8px;
+    width: 4px;
     height: 100%;
     background: linear-gradient(180deg,
         var(--lcars-panel) 0%,
@@ -104,67 +161,11 @@ html, body {
         var(--lcars-panel) 100%);
 }
 
-.lcars-border::after {
-    content: '';
-    position: absolute;
-    top: 20px;
-    right: 8px;
-    width: 30px;
-    height: calc(100% - 40px);
-    background: repeating-linear-gradient(
-        180deg,
-        transparent 0px,
-        transparent 30px,
-        var(--lcars-panel-dark) 30px,
-        var(--lcars-panel-dark) 35px
-    );
-    opacity: 0.3;
-}
-
-/* LCARS Elbow Panel - Top Left */
-.lcars-elbow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100px;
-    height: 80px;
-    background: var(--lcars-panel);
-    border-radius: 0 0 100px 0;
-}
-
-.lcars-elbow-inner {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 60px;
-    height: 40px;
-    background: var(--lcars-bg);
-    border-radius: 0 0 60px 0;
-}
-
-/* LCARS Button Panel - Bottom Left */
-.lcars-button-panel {
-    position: absolute;
-    bottom: 20px;
-    left: 10px;
-    width: 40px;
+.lcars-border-buttons-bottom {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-}
-
-.lcars-button-panel .btn-block {
-    height: 20px;
-    background: var(--lcars-blue);
-    border-radius: 5px;
-}
-
-.lcars-button-panel .btn-block:nth-child(2) {
-    background: var(--lcars-purple);
-}
-
-.lcars-button-panel .btn-block:nth-child(3) {
-    background: var(--lcars-green);
+    gap: 4px;
+    padding: 15px 5px;
 }
 
 /* Main Content Area */
@@ -180,48 +181,102 @@ html, body {
 
 .lcars-header {
     background-color: var(--lcars-dark);
-    padding: 20px 30px;
+    padding: 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     border-bottom: 3px solid var(--lcars-panel);
     position: relative;
 }
 
-.lcars-header::before {
+/* Left section with elbow panel */
+.lcars-header-left {
+    display: flex;
+    align-items: stretch;
+}
+
+/* The LCARS elbow/title block */
+.lcars-header-title-block {
+    background: var(--lcars-panel);
+    padding: 15px 30px 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    min-width: 200px;
+}
+
+/* Rounded corner at bottom-right of title block */
+.lcars-header-title-block::after {
     content: '';
     position: absolute;
     bottom: -3px;
-    left: 0;
-    width: 200px;
-    height: 3px;
+    right: -40px;
+    width: 40px;
+    height: calc(100% + 3px);
     background: var(--lcars-panel);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%, 0 calc(100% - 40px));
 }
 
-.lcars-title {
-    font-size: 28px;
+.lcars-header-title {
+    font-size: 24px;
     font-weight: bold;
-    color: var(--lcars-panel);
+    color: var(--lcars-bg);
     text-transform: uppercase;
     letter-spacing: 3px;
+}
+
+.lcars-header-subtitle {
+    font-size: 12px;
+    color: var(--lcars-bg);
+    letter-spacing: 1px;
+    margin-top: 4px;
+    opacity: 0.9;
+}
+
+/* Add form styling */
+.add-form {
     display: flex;
     align-items: center;
-    gap: 15px;
+    margin-left: 50px;
 }
 
-.lcars-title::before {
-    content: '';
-    width: 12px;
-    height: 40px;
-    background: var(--lcars-panel);
-    border-radius: 6px;
-}
-
-.lcars-title span {
+.add-form input {
+    background-color: var(--lcars-darker);
+    border: 2px solid var(--lcars-blue);
+    border-right: none;
     color: var(--lcars-text);
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 30px 0 0 30px;
+    width: 220px;
+}
+
+.add-form input:focus {
+    outline: none;
+    border-color: var(--lcars-accent);
+}
+
+.add-form input::placeholder {
+    color: var(--lcars-text-dim);
+}
+
+.add-btn-header {
+    background-color: var(--lcars-blue);
+    color: var(--lcars-bg);
+    padding: 12px 25px;
     font-size: 14px;
-    font-weight: normal;
+    font-weight: bold;
+    text-transform: uppercase;
     letter-spacing: 1px;
+    border: none;
+    border-radius: 0 30px 30px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-btn-header:hover {
+    background-color: var(--lcars-accent);
 }
 
 /* Theme Selector */
@@ -229,6 +284,7 @@ html, body {
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 0 20px;
 }
 
 .theme-selector label {
@@ -257,58 +313,6 @@ html, body {
 .theme-selector select option {
     background: var(--lcars-dark);
     color: var(--lcars-text);
-}
-
-/* Add Form */
-.add-form-container {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin-top: 15px;
-}
-
-.add-form {
-    display: flex;
-    gap: 0;
-}
-
-.add-form input {
-    background-color: var(--lcars-darker);
-    border: 2px solid var(--lcars-blue);
-    border-right: none;
-    color: var(--lcars-text);
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 30px 0 0 30px;
-    width: 250px;
-}
-
-.add-form input:focus {
-    outline: none;
-    border-color: var(--lcars-accent);
-}
-
-.add-form input::placeholder {
-    color: var(--lcars-text-dim);
-}
-
-.add-btn {
-    background-color: var(--lcars-blue);
-    color: var(--lcars-bg);
-    border: 2px solid var(--lcars-blue);
-    padding: 12px 30px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-radius: 0 30px 30px 0;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.add-btn:hover {
-    background-color: var(--lcars-accent);
-    border-color: var(--lcars-accent);
 }
 
 /* ===========================
@@ -692,17 +696,21 @@ html, body {
         width: 40px;
     }
 
-    .lcars-elbow {
-        width: 70px;
-        height: 60px;
+    .lcars-header-title-block {
+        min-width: 150px;
+        padding: 12px 20px 12px 15px;
     }
 
-    .lcars-title {
-        font-size: 22px;
+    .lcars-header-title {
+        font-size: 20px;
+    }
+
+    .add-form {
+        margin-left: 30px;
     }
 
     .add-form input {
-        width: 180px;
+        width: 160px;
     }
 
     .lcars-table th,
@@ -732,6 +740,25 @@ html, body {
         flex-direction: column;
         gap: 15px;
         padding: 15px 20px;
+    }
+
+    .lcars-header-left {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .lcars-header-title-block {
+        min-width: unset;
+        width: fit-content;
+    }
+
+    .lcars-header-title-block::after {
+        display: none;
+    }
+
+    .add-form {
+        margin-left: 0;
+        margin-top: 15px;
     }
 
     .add-form input {

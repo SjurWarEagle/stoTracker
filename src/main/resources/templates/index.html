@@ -9,26 +9,33 @@
 </head>
 <body>
     <div class="lcars-wrapper">
-        <!-- Vertical LCARS Border -->
+        <!-- Vertical LCARS Border - Left Side -->
         <aside class="lcars-border">
-            <div class="lcars-elbow">
-                <div class="lcars-elbow-inner"></div>
+            <!-- Large elbow panel at top -->
+            <div class="lcars-border-top"></div>
+            <!-- Button row section -->
+            <div class="lcars-border-buttons">
+                <div class="lcars-border-btn lcars-border-btn-1"></div>
+                <div class="lcars-border-btn lcars-border-btn-2"></div>
+                <div class="lcars-border-btn lcars-border-btn-3"></div>
             </div>
-            <div class="lcars-button-panel">
-                <div class="btn-block"></div>
-                <div class="btn-block"></div>
-                <div class="btn-block"></div>
+            <!-- Filler section -->
+            <div class="lcars-border-filler"></div>
+            <!-- Bottom button group -->
+            <div class="lcars-border-buttons-bottom">
+                <div class="lcars-border-btn lcars-border-btn-4"></div>
+                <div class="lcars-border-btn lcars-border-btn-5"></div>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="lcars-content">
-            <!-- Header -->
+            <!-- Header with LCARS elbow design -->
             <header class="lcars-header">
-                <div>
-                    <div class="lcars-title">
-                        STARFLEET
-                        <span>🖖 Daily Task Tracker</span>
+                <div class="lcars-header-left">
+                    <div class="lcars-header-title-block">
+                        <div class="lcars-header-title">STARFLEET</div>
+                        <div class="lcars-header-subtitle">🖖 Daily Task Tracker</div>
                     </div>
                     <form class="add-form" action="/add" method="post">
                         <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
