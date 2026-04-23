@@ -23,8 +23,8 @@ public class StoData {
     @Column(name = "recruitment_time")
     private LocalDateTime recruitmentTime;
 
-    @Column(name = "convertion_time")
-    private LocalDateTime convertionTime;
+    @Column(name = "refining_time")
+    private LocalDateTime refiningTime;
 
     @Column(name = "event_time")
     private LocalDateTime eventTime;
@@ -88,12 +88,12 @@ public class StoData {
         this.recruitmentTime = recruitmentTime;
     }
 
-    public LocalDateTime getConvertionTime() {
-        return convertionTime;
+    public LocalDateTime getRefiningTime() {
+        return refiningTime;
     }
 
-    public void setConvertionTime(LocalDateTime convertionTime) {
-        this.convertionTime = convertionTime;
+    public void setRefiningTime(LocalDateTime refiningTime) {
+        this.refiningTime = refiningTime;
     }
 
     public LocalDateTime getEventTime() {

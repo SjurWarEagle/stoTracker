@@ -220,12 +220,12 @@ class StoDataServiceTest {
         // Assert
         assertTrue(result.success());
         assertNotNull(result.data().getRecruitmentTime());
-        assertNull(result.data().getConvertionTime());
+        assertNull(result.data().getRefiningTime());
         assertNull(result.data().getEventTime());
     }
 
     @Test
-    void recordTimestamp_convertion_setsTime() {
+    void recordTimestamp_refining_setsTime() {
         // Arrange
         Long id = 1L;
         StoData existing = new StoData("Char");
@@ -234,12 +234,12 @@ class StoDataServiceTest {
         when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // Act
-        Result<StoData> result = service.recordTimestamp(id, "convertion");
+        Result<StoData> result = service.recordTimestamp(id, "refining");
 
         // Assert
         assertTrue(result.success());
         assertNull(result.data().getRecruitmentTime());
-        assertNotNull(result.data().getConvertionTime());
+        assertNotNull(result.data().getRefiningTime());
         assertNull(result.data().getEventTime());
     }
 
@@ -258,7 +258,7 @@ class StoDataServiceTest {
         // Assert
         assertTrue(result.success());
         assertNull(result.data().getRecruitmentTime());
-        assertNull(result.data().getConvertionTime());
+        assertNull(result.data().getRefiningTime());
         assertNotNull(result.data().getEventTime());
     }
 
@@ -293,7 +293,7 @@ class StoDataServiceTest {
     }
 
     @Test
-    void recordTimestamp_refiningAlias_setsTime() {
+    void recordTimestamp_refiningCaseInsensitive_setsTime() {
         // Arrange
         Long id = 1L;
         StoData existing = new StoData("Char");
@@ -302,11 +302,11 @@ class StoDataServiceTest {
         when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // Act
-        Result<StoData> result = service.recordTimestamp(id, "refining");
+        Result<StoData> result = service.recordTimestamp(id, "REFINING");
 
         // Assert
         assertTrue(result.success());
-        assertNotNull(result.data().getConvertionTime());
+        assertNotNull(result.data().getRefiningTime());
     }
 
     @Test
@@ -328,30 +328,12 @@ class StoDataServiceTest {
     }
 
     @Test
-    void clearTimestamp_convertion_clearsTime() {
+    void clearTimestamp_refining_clearsTime() {
         // Arrange
         Long id = 1L;
         StoData existing = new StoData("Char");
         existing.setId(id);
-        existing.setConvertionTime(LocalDateTime.now());
-        when(repository.findById(id)).thenReturn(Optional.of(existing));
-        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        // Act
-        Result<StoData> result = service.clearTimestamp(id, "convertion");
-
-        // Assert
-        assertTrue(result.success());
-        assertNull(result.data().getConvertionTime());
-    }
-
-    @Test
-    void clearTimestamp_refiningAlias_clearsTime() {
-        // Arrange
-        Long id = 1L;
-        StoData existing = new StoData("Char");
-        existing.setId(id);
-        existing.setConvertionTime(LocalDateTime.now());
+        existing.setRefiningTime(LocalDateTime.now());
         when(repository.findById(id)).thenReturn(Optional.of(existing));
         when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
 
@@ -360,7 +342,25 @@ class StoDataServiceTest {
 
         // Assert
         assertTrue(result.success());
-        assertNull(result.data().getConvertionTime());
+        assertNull(result.data().getRefiningTime());
+    }
+
+    @Test
+    void clearTimestamp_refiningCaseInsensitive_clearsTime() {
+        // Arrange
+        Long id = 1L;
+        StoData existing = new StoData("Char");
+        existing.setId(id);
+        existing.setRefiningTime(LocalDateTime.now());
+        when(repository.findById(id)).thenReturn(Optional.of(existing));
+        when(repository.save(any(StoData.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // Act
+        Result<StoData> result = service.clearTimestamp(id, "REFINING");
+
+        // Assert
+        assertTrue(result.success());
+        assertNull(result.data().getRefiningTime());
     }
 
     @Test

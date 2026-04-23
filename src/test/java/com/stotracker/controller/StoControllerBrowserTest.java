@@ -101,7 +101,7 @@ class StoControllerBrowserTest {
         Optional<StoData> finalState = repository.findById(charId);
         assertTrue(finalState.isPresent());
         assertNull(finalState.get().getRecruitmentTime());
-        assertNull(finalState.get().getConvertionTime());
+        assertNull(finalState.get().getRefiningTime());
         assertNull(finalState.get().getEventTime());
         assertEquals(34780, finalState.get().getDilithium());
         assertEquals(100000, finalState.get().getCredits());
@@ -473,7 +473,7 @@ class StoControllerBrowserTest {
         if (type.equals("recruitment")) {
             assertNotNull(withTimestamp.get().getRecruitmentTime());
         } else if (type.equals("refining")) {
-            assertNotNull(withTimestamp.get().getConvertionTime());
+            assertNotNull(withTimestamp.get().getRefiningTime());
         } else if (type.equals("event")) {
             assertNotNull(withTimestamp.get().getEventTime());
         }
@@ -499,7 +499,7 @@ class StoControllerBrowserTest {
         if (type.equals("recruitment")) {
             assertNull(clearedTimestamp.get().getRecruitmentTime());
         } else if (type.equals("refining")) {
-            assertNull(clearedTimestamp.get().getConvertionTime());
+            assertNull(clearedTimestamp.get().getRefiningTime());
         } else if (type.equals("event")) {
             assertNull(clearedTimestamp.get().getEventTime());
         }

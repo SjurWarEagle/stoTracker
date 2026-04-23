@@ -17,7 +17,7 @@ class StoDataTest {
         assertEquals(0, data.getDilithium());
         assertEquals(0, data.getCredits());
         assertNull(data.getRecruitmentTime());
-        assertNull(data.getConvertionTime());
+        assertNull(data.getRefiningTime());
         assertNull(data.getEventTime());
         assertNull(data.getUpdatedAt());
     }
@@ -31,7 +31,7 @@ class StoDataTest {
         assertEquals(0, data.getDilithium());
         assertEquals(0, data.getCredits());
         assertNull(data.getRecruitmentTime());
-        assertNull(data.getConvertionTime());
+        assertNull(data.getRefiningTime());
         assertNull(data.getEventTime());
         assertNotNull(data.getUpdatedAt());
     }
@@ -62,12 +62,12 @@ class StoDataTest {
     }
 
     @Test
-    void setConvertionTime_updatesValue() {
+    void setRefiningTime_updatesValue() {
         StoData data = new StoData("Char");
         LocalDateTime time = LocalDateTime.now();
-        data.setConvertionTime(time);
+        data.setRefiningTime(time);
 
-        assertEquals(time, data.getConvertionTime());
+        assertEquals(time, data.getRefiningTime());
     }
 
     @Test
@@ -116,7 +116,7 @@ class StoDataTest {
         data.setDilithium(100);
         data.setCredits(200);
         data.setRecruitmentTime(LocalDateTime.now());
-        data.setConvertionTime(LocalDateTime.now());
+        data.setRefiningTime(LocalDateTime.now());
         data.setEventTime(LocalDateTime.now());
         data.setUpdatedAt(LocalDateTime.now());
 

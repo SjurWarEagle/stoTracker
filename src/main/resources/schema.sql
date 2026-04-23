@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS sto_data (
     dilithium INTEGER DEFAULT 0,
     credits INTEGER DEFAULT 0,
     recruitment_time DATETIME,
-    convertion_time DATETIME,
+    refining_time DATETIME,
     event_time DATETIME,
     updated_at DATETIME
 );

@@ -83,17 +83,17 @@
                                 <input type="hidden" name="type" value="refining">
                                 <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
                             </form>
-                            <div class="timestamp-info" th:if="${data.convertionTime}">
-                                <span class="countdown" th:data-timestamp="${data.convertionTime}" data-type="refining">--:--</span>
-                                <span class="last-updated" th:text="${#temporals.format(data.convertionTime, 'HH:mm')}">--:--</span>
+                            <div class="timestamp-info" th:if="${data.refiningTime}">
+                                <span class="countdown" th:data-timestamp="${data.refiningTime}" data-type="refining">--:--</span>
+                                <span class="last-updated" th:text="${#temporals.format(data.refiningTime, 'HH:mm')}">--:--</span>
                             </div>
                             <form action="/untimestamp" method="post" class="timestamp-form unset-form"
-                                  th:if="${data.convertionTime}">
+                                  th:if="${data.refiningTime}">
                                 <input type="hidden" name="id" th:value="${data.id}">
                                 <input type="hidden" name="type" value="refining">
                                 <button type="submit" class="lcars-btn timestamp-btn unset-btn">✗</button>
                             </form>
-                            <span class="unset-label" th:unless="${data.convertionTime}">unset</span>
+                            <span class="unset-label" th:unless="${data.refiningTime}">unset</span>
                         </div>
                     </td>
                     <td>

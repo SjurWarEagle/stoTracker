@@ -99,23 +99,23 @@ class StoControllerIntegrationTest {
 
         StoData updated = repository.findById(saved.getId()).orElseThrow();
         assert updated.getRecruitmentTime() != null;
-        assert updated.getConvertionTime() == null;
+        assert updated.getRefiningTime() == null;
         assert updated.getEventTime() == null;
     }
 
     @Test
-    void timestamp_setsConvertionTime() throws Exception {
+    void timestamp_setsRefiningTime() throws Exception {
         StoData saved = repository.save(new StoData("TimestampChar"));
 
         mockMvc.perform(post("/timestamp")
                         .param("id", String.valueOf(saved.getId()))
-                        .param("type", "convertion")
+                        .param("type", "refining")
                         .contentType("application/x-www-form-urlencoded"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
         StoData updated = repository.findById(saved.getId()).orElseThrow();
-        assert updated.getConvertionTime() != null;
+        assert updated.getRefiningTime() != null;
     }
 
     @Test
@@ -151,20 +151,20 @@ class StoControllerIntegrationTest {
     }
 
     @Test
-    void untimestamp_clearsConvertionTime() throws Exception {
+    void untimestamp_clearsRefiningTime() throws Exception {
         StoData saved = repository.save(new StoData("TimestampChar"));
-        saved.setConvertionTime(java.time.LocalDateTime.now());
+        saved.setRefiningTime(java.time.LocalDateTime.now());
         repository.save(saved);
 
         mockMvc.perform(post("/untimestamp")
                         .param("id", String.valueOf(saved.getId()))
-                        .param("type", "convertion")
+                        .param("type", "refining")
                         .contentType("application/x-www-form-urlencoded"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
         StoData updated = repository.findById(saved.getId()).orElseThrow();
-        assert updated.getConvertionTime() == null;
+        assert updated.getRefiningTime() == null;
     }
 
     @Test
