@@ -234,6 +234,8 @@ class StoControllerBrowserTest {
         // Now change the value to a new number
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].value = '5555';", dilithiumInput);
+        // Wait to see formatted value (what user sees)
+        waitForFormatting();
         // Trigger change event to submit form (blur only reformats, change submits)
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", dilithiumInput);
@@ -391,6 +393,8 @@ class StoControllerBrowserTest {
         WebElement input = row.findElement(By.cssSelector("input.dilithium-input"));
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].value = '48000';", input);
+        // Wait to see formatted value (what user sees)
+        waitForFormatting();
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", input);
         waitForPageLoad();
@@ -420,6 +424,8 @@ class StoControllerBrowserTest {
         // Use JavaScript to set value directly
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].value = arguments[1];", input, String.valueOf(value));
+        // Wait to see formatted value (what user sees)
+        waitForFormatting();
         // Trigger change event via JavaScript
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", input);
@@ -433,6 +439,8 @@ class StoControllerBrowserTest {
         // Use JavaScript to set value directly
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].value = arguments[1];", input, String.valueOf(value));
+        // Wait to see formatted value (what user sees)
+        waitForFormatting();
         // Trigger change event via JavaScript
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", input);
@@ -531,6 +539,15 @@ class StoControllerBrowserTest {
     }
 
     private void waitForPageLoad() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    // Wait to see the formatted value (simulates user seeing the formatted input)
+    private void waitForFormatting() {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {

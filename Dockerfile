@@ -1,5 +1,7 @@
 FROM maven:3.9-eclipse-temurin-21 AS builder
 
+ARG BUILD_DATE=unknown
+
 WORKDIR /app
 
 # Copy source including checkstyle at root
@@ -14,6 +16,7 @@ RUN mvn package -DskipTests -Dcheckstyle.skip=true -B
 FROM eclipse-temurin:21-jre
 
 ENV TZ=Europe/Berlin
+ENV APP_BUILD_DATE=${BUILD_DATE}
 WORKDIR /app
 
 # Create non-root user
@@ -27,4 +30,4 @@ RUN mkdir -p /data && chmod 777 /data
 
 EXPOSE 4545
 
-ENTRYPOINT ["java", "-jar", "-Dserver.port=4545", "-Dspring.datasource.url=jdbc:sqlite:/data/stotracker.db", "app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dserver.port=4545", "-Dspring.datasource.url=jdbc:sqlite:/data/stotracker.db", "-Dapp.build-date=${APP_BUILD_DATE}", "app.jar"]

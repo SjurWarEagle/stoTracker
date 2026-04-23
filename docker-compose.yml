@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE:-$(date -u +'%Y-%m-%d %H:%M:%S')}
     ports:
       - "4545:4545"
     volumes:

@@ -3,6 +3,7 @@ package com.stotracker.controller;
 import com.stotracker.model.StoData;
 import com.stotracker.service.Result;
 import com.stotracker.service.StoDataService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +16,18 @@ import java.util.Map;
 public class StoController {
 
     private final StoDataService service;
+    private final String buildDate;
 
-    public StoController(StoDataService service) {
+    public StoController(StoDataService service, @Value("${app.build-date:unknown}") String buildDate) {
         this.service = service;
+        this.buildDate = buildDate;
     }
 
     @GetMapping("/")
     public String index(Model model) {
         Result<List<StoData>> result = service.getAllData();
         model.addAttribute("stoDataList", result.data());
+        model.addAttribute("buildDate", buildDate);
         return "index";
     }
 
