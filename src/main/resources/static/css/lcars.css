@@ -77,7 +77,7 @@ html, body {
 }
 
 /* ===========================
-   MAIN LAYOUT WITH LCARS BORDER
+   LCARS SIDEBAR FRAME - LEFT SIDE
    =========================== */
 
 .lcars-wrapper {
@@ -85,9 +85,9 @@ html, body {
     min-height: 100vh;
 }
 
-/* Vertical LCARS Border - Left Side */
+/* LCARS Sidebar Frame */
 .lcars-border {
-    width: 50px;
+    width: 80px;
     min-height: 100vh;
     background: var(--lcars-bg);
     display: flex;
@@ -95,77 +95,101 @@ html, body {
     position: relative;
 }
 
-/* Top section - the large orange elbow */
-.lcars-border-top {
+/* Frame section - base style for all sidebar panels */
+.lcars-frame-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Top elbow panel - the signature LCARS rounded corner */
+.lcars-frame-elbow {
     width: 100%;
-    height: 120px;
+    height: 100px;
     background: var(--lcars-panel);
     position: relative;
 }
 
-/* Rounded corner cutout */
-.lcars-border-top::after {
+/* Rounded corner cutout at bottom-right */
+.lcars-frame-elbow::after {
     content: '';
     position: absolute;
     bottom: 0;
-    right: -25px;
-    width: 50px;
-    height: 50px;
+    right: -20px;
+    width: 40px;
+    height: 40px;
     background: var(--lcars-bg);
-    border-radius: 0 25px 0 0;
+    border-radius: 0 20px 0 0;
 }
 
-/* Button sections */
-.lcars-border-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 15px 5px;
+/* Label text inside elbow */
+.lcars-frame-elbow .lcars-frame-label {
+    color: var(--lcars-bg);
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-left: 8px;
+    margin-top: 8px;
 }
 
-.lcars-border-btn {
-    height: 25px;
-    border-radius: 5px;
+/* Block section panels */
+.lcars-frame-block {
+    width: 100%;
+    height: 60px;
+    background: var(--lcars-panel);
+    margin-top: 8px;
+    border-radius: 0 10px 10px 0;
 }
 
-.lcars-border-btn-1 { background: var(--lcars-blue); }
-.lcars-border-btn-2 { background: var(--lcars-purple); }
-.lcars-border-btn-3 { background: var(--lcars-green); }
-.lcars-border-btn-4 { background: var(--lcars-accent); }
-.lcars-border-btn-5 { background: var(--lcars-red); }
+.lcars-frame-block .lcars-frame-label {
+    color: var(--lcars-bg);
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    opacity: 0.9;
+}
 
-/* Filler section with vertical stripes */
-.lcars-border-filler {
+/* Bottom block - different shade */
+.lcars-frame-block-bottom {
+    background: var(--lcars-panel-dark);
+    margin-top: 8px;
+}
+
+/* Filler area with vertical accent */
+.lcars-frame-filler {
     flex: 1;
-    background: repeating-linear-gradient(
-        180deg,
-        var(--lcars-filler) 0px,
-        var(--lcars-filler) 20px,
-        var(--lcars-border) 20px,
-        var(--lcars-border) 22px
-    );
+    width: 100%;
     position: relative;
+    min-height: 100px;
 }
 
-/* Vertical accent stripe */
-.lcars-border-filler::before {
+/* Vertical accent stripe on right side of filler */
+.lcars-frame-filler::before {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
-    width: 4px;
+    width: 8px;
     height: 100%;
     background: linear-gradient(180deg,
         var(--lcars-panel) 0%,
-        var(--lcars-panel-dark) 50%,
+        var(--lcars-panel-dark) 30%,
+        var(--lcars-panel-dark) 70%,
         var(--lcars-panel) 100%);
 }
 
-.lcars-border-buttons-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 15px 5px;
+/* Horizontal accent lines in filler */
+.lcars-frame-filler::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 12px;
+    width: 40px;
+    height: 2px;
+    background: var(--lcars-panel);
+    box-shadow: 0 30px 0 var(--lcars-panel), 0 60px 0 var(--lcars-panel);
+    opacity: 0.5;
 }
 
 /* Main Content Area */
@@ -189,33 +213,33 @@ html, body {
     position: relative;
 }
 
-/* Left section with elbow panel */
+/* Left section with LCARS panel */
 .lcars-header-left {
     display: flex;
     align-items: stretch;
 }
 
-/* The LCARS elbow/title block */
-.lcars-header-title-block {
+/* The LCARS header panel block */
+.lcars-header-panel {
     background: var(--lcars-panel);
-    padding: 15px 30px 15px 20px;
+    padding: 20px 40px 20px 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
-    min-width: 200px;
+    min-width: 220px;
 }
 
-/* Rounded corner at bottom-right of title block */
-.lcars-header-title-block::after {
+/* Rounded corner at bottom-right of header panel */
+.lcars-header-panel::after {
     content: '';
     position: absolute;
     bottom: -3px;
-    right: -40px;
-    width: 40px;
+    right: -50px;
+    width: 50px;
     height: calc(100% + 3px);
     background: var(--lcars-panel);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 40px 100%, 0 calc(100% - 40px));
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50px 100%, 0 calc(100% - 50px));
 }
 
 .lcars-header-title {
@@ -238,7 +262,7 @@ html, body {
 .add-form {
     display: flex;
     align-items: center;
-    margin-left: 50px;
+    margin-left: 60px;
 }
 
 .add-form input {
@@ -693,12 +717,20 @@ html, body {
 
 @media (max-width: 1024px) {
     .lcars-border {
-        width: 40px;
+        width: 60px;
     }
 
-    .lcars-header-title-block {
-        min-width: 150px;
-        padding: 12px 20px 12px 15px;
+    .lcars-frame-elbow {
+        height: 80px;
+    }
+
+    .lcars-frame-block {
+        height: 50px;
+    }
+
+    .lcars-header-panel {
+        min-width: 160px;
+        padding: 15px 30px 15px 20px;
     }
 
     .lcars-header-title {
@@ -706,7 +738,7 @@ html, body {
     }
 
     .add-form {
-        margin-left: 30px;
+        margin-left: 40px;
     }
 
     .add-form input {
@@ -747,12 +779,12 @@ html, body {
         width: 100%;
     }
 
-    .lcars-header-title-block {
+    .lcars-header-panel {
         min-width: unset;
         width: fit-content;
     }
 
-    .lcars-header-title-block::after {
+    .lcars-header-panel::after {
         display: none;
     }
 
