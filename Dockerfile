@@ -13,6 +13,7 @@ RUN mvn package -DskipTests -Dcheckstyle.skip=true -B
 # Runtime stage
 FROM eclipse-temurin:21-jre
 
+ENV TZ=Europe/Berlin
 WORKDIR /app
 
 # Create non-root user

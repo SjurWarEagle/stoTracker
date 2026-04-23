@@ -40,6 +40,15 @@ function getNext02_00CET() {
     return cetTime;
 }
 
+// Parse timestamp as CET (server stores times in CET but sends as UTC strings)
+function parseCET(timestamp) {
+    // Server sends: "2026-04-23T11:20:32.173" which is UTC time (13:20 CET = 11:20 UTC)
+    // We need to add 2 hours to convert UTC back to CET
+    const date = new Date(timestamp);
+    // CET is UTC+2 in summer
+    return new Date(date.getTime() + (2 * 60 * 60 * 1000));
+}
+
 // Update countdown timers
 function updateCountdowns() {
     document.querySelectorAll('.countdown').forEach(el => {
@@ -47,7 +56,7 @@ function updateCountdowns() {
         const type = el.getAttribute('data-type');
         if (!timestamp || !type) return;
 
-        const lastUpdated = new Date(timestamp);
+        const lastUpdated = parseCET(timestamp);
         let targetTime;
         let diff;
 
