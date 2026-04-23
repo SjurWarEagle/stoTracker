@@ -227,6 +227,13 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [x] Add input validation (name max length, dilithium/credits max bounds) (Task 19)
 - [ ] Add flash messages for user feedback on success/error operations (Task 20) - incomplete due to headless browser compatibility issues
 - [x] Extract inline JavaScript handlers to time.js for maintainability (Task 21) - already done
+- [x] LCARS UI redesign with themes from thelcars.com (Task 22):
+  - Classic LCARS theme (default TNG style)
+  - Nemesis Blue theme
+  - Lower Decks theme
+  - Theme selector dropdown in top right
+  - Vertical LCARS border with elbow panels
+  - Responsive design
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)
