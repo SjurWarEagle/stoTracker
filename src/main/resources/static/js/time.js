@@ -7,15 +7,16 @@ function updateClock() {
     document.getElementById('clock').textContent = `${hours}:${minutes}`;
 }
 
-// Get next 02:00 in CET
-function getNext02_00CET() {
-    const now = new Date();
-    const cetTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
-    cetTime.setHours(2, 0, 0, 0);
-    if (cetTime.getTime() <= now.getTime()) {
-        cetTime.setDate(cetTime.getDate() + 1);
+// Get next 02:00 CET after the given timestamp's date
+// If timestamp is before 02:00 CET, deadline is 02:00 that same day
+// If timestamp is at or after 02:00 CET, deadline is 02:00 next day
+function getNext02_00CETAfter(timestampCET) {
+    const baseTime = new Date(timestampCET);
+    baseTime.setHours(2, 0, 0, 0);
+    if (baseTime.getTime() <= timestampCET.getTime()) {
+        baseTime.setDate(baseTime.getDate() + 1);
     }
-    return cetTime;
+    return baseTime;
 }
 
 // Parse timestamp as CET (server stores times in CET but sends as UTC strings)
@@ -37,18 +38,26 @@ function updateCountdowns() {
         const lastUpdated = parseCET(timestamp);
         let targetTime;
         let diff;
+        let isOverdue = false;
 
         if (type === 'recruitment') {
             // Recruitment: 20 minutes from last updated
             targetTime = new Date(lastUpdated.getTime() + 20 * 60 * 1000);
             diff = targetTime - new Date();
         } else if (type === 'refining' || type === 'event') {
-            // Refining/Event: countdown to 02:00 tomorrow CET
-            targetTime = getNext02_00CET();
+            // Refining/Event: deadline is 02:00 CET after the timestamp's date
+            // If that deadline has passed, it's overdue
+            targetTime = getNext02_00CETAfter(lastUpdated);
             diff = targetTime - new Date();
+            if (diff < 0) {
+                isOverdue = true;
+            }
         }
 
-        if (diff <= 0) {
+        if (isOverdue) {
+            el.textContent = 'overdue';
+            el.classList.add('overdue');
+        } else if (diff <= 0) {
             el.textContent = '0h 0m';
             el.classList.remove('overdue');
         } else {
