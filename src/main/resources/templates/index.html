@@ -93,7 +93,7 @@
                                         <input type="hidden" name="type" value="event">
                                         <button type="submit" class="lcars-btn unset-btn">✗</button>
                                     </form>
-                                    <span class="unset-label" th:unless="${data.eventTime}">unset</span>
+                                    <span class="countdown overdue" th:unless="${data.eventTime}">overdue</span>
                                 </div>
                             </td>
                             <td>
@@ -127,7 +127,7 @@
                                         <input type="hidden" name="type" value="refining">
                                         <button type="submit" class="lcars-btn unset-btn">✗</button>
                                     </form>
-                                    <span class="unset-label" th:unless="${data.refiningTime}">unset</span>
+                                    <span class="countdown overdue" th:unless="${data.refiningTime}">overdue</span>
                                 </div>
                             </td>
                             <td>
