@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" data-theme="classic">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,38 +8,38 @@
     <link rel="stylesheet" th:href="@{/css/lcars.css}">
 </head>
 <body>
-    <div class="lcars-wrapper">
-        <!-- LCARS Sidebar Frame - Left Side -->
-        <aside class="left-frame">
-            <div class="panel-0"></div>
-            <div class="panel-group">
-                <div class="panel-3 lcars-clock" id="clock">03</div>
-                <div class="panel-4">LV-426</div>
-                <div class="panel-5">NX-01</div>
-                <div class="panel-6">NCC-1701</div>
-                <div class="panel-7">DS9-631</div>
-                <div class="panel-8">VOY-74656</div>
-                <div class="panel-9">ENT-1701D</div>
-                <div class="panel-10">TNG-2356</div>
-                <div class="panel-11">TOS-9711</div>
-                <div class="panel-12">PIC-2396</div>
-                <div class="panel-13">DIS-2256</div>
+    <div class="lcars-app">
+        <!-- LCARS Left Sidebar Frame -->
+        <aside class="lcars-sidebar">
+            <!-- Elbow Panel with rounded outer corner -->
+            <div class="panel-0">
+                <div class="panel-0-title">STARFLEET</div>
+                <div class="panel-0-subtitle">🖖 Daily Tasks</div>
             </div>
-            <div class="panel-build-info">v0.1</div>
+
+            <!-- Panel Segments -->
+            <div class="panel-group">
+                <div class="panel-segment panel-segment-blue">LV-426</div>
+                <div class="panel-segment panel-segment-violet">NX-01</div>
+                <div class="panel-segment panel-segment-red">NCC-1701</div>
+                <div class="panel-segment panel-segment-violet">DS9-631</div>
+                <div class="panel-segment panel-segment-yellow">VOY-74656</div>
+                <div class="panel-segment panel-segment-blue">ENT-1701D</div>
+                <div class="panel-segment panel-segment-orange">TNG-2356</div>
+                <div class="panel-segment panel-segment-moonlit">TOS-9711</div>
+                <div class="panel-segment panel-segment-lilac">PIC-2396</div>
+                <div class="panel-segment panel-segment-sky">DIS-2256</div>
+            </div>
+
+            <!-- Version Info -->
+            <div class="panel-build-info">v1.0</div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="lcars-content">
-            <!-- Header with LCARS panel design -->
-            <header class="lcars-header">
-                <div class="lcars-header-left">
-                    <div class="lcars-header-panel">
-                        <div class="lcars-header-title">STARFLEET</div>
-                        <div class="lcars-header-subtitle">🖖 Daily Task Tracker</div>
-                    </div>
-                </div>
-            </header>
+        <!-- Header Panel - spans full width -->
+        <div class="lcars-header-panel"></div>
 
+        <!-- Main Content -->
+        <main class="lcars-main">
             <!-- Flash Messages -->
             <div class="flash-messages" th:if="${flashSuccess}">
                 <div class="flash-success" th:text="${flashSuccess}">Success message</div>
@@ -48,142 +48,158 @@
                 <div class="flash-error" th:text="${flashError}">Error message</div>
             </div>
 
-            <!-- Main Content Area -->
-            <div class="lcars-main">
-                <div class="table-panel">
-                    <div class="table-panel-title">Character Status</div>
-                </div>
+            <!-- Data Table -->
+            <table class="lcars-table">
+                <thead>
+                    <tr>
+                        <th>DELETE</th>
+                        <th>NAME</th>
+                        <th>EVENT</th>
+                        <th>DILITHIUM ORE</th>
+                        <th>REFINING</th>
+                        <th>RECRUITMENT</th>
+                        <th>CREDITS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="data : ${stoDataList}">
+                        <!-- Delete Column -->
+                        <td>
+                            <form action="/delete" method="post" class="delete-form"
+                                  onsubmit="return confirm('Delete ' + this.querySelector('input[name=name]').value + '?')">
+                                <input type="hidden" name="name" th:value="${data.name}">
+                                <button type="submit" class="delete-btn">X</button>
+                            </form>
+                        </td>
 
-                <table class="lcars-table">
-                    <thead>
-                        <tr>
-                            <th>DELETE</th>
-                            <th>NAME</th>
-                            <th>EVENT</th>
-                            <th>DILITHIUM ORE</th>
-                            <th>REFINING</th>
-                            <th>RECRUITMENT</th>
-                            <th>CREDITS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="data : ${stoDataList}">
-                            <td>
-                                <form action="/delete" method="post" class="delete-form"
-                                      onsubmit="return confirm('Delete ' + this.querySelector('input[name=name]').value + '?')">
-                                    <input type="hidden" name="name" th:value="${data.name}">
-                                    <button type="submit" class="lcars-btn delete-btn">X</button>
+                        <!-- Name Column - Clickable for highlight -->
+                        <td class="name-cell clickable" th:text="${data.name}" onclick="toggleRowHighlight(this)">Name</td>
+
+                        <!-- Event Column -->
+                        <td>
+                            <div class="timestamp-cell">
+                                <form action="/timestamp" method="post" class="timestamp-form">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="type" value="event">
+                                    <button type="submit" class="timestamp-btn set-btn">✓</button>
                                 </form>
-                            </td>
-                            <td class="name-cell clickable" th:text="${data.name}" onclick="toggleRowHighlight(this)">Name</td>
-                            <td>
-                                <div class="timestamp-cell">
-                                    <form action="/timestamp" method="post" class="timestamp-form">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="type" value="event">
-                                        <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
-                                    </form>
-                                    <div class="timestamp-info" th:if="${data.eventTime}">
-                                        <span class="countdown" th:data-timestamp="${data.eventTime}" data-type="event">--:--</span>
-                                        <span class="last-updated" th:text="${#temporals.format(data.eventTime, 'HH:mm')}">--:--</span>
-                                    </div>
-                                    <form action="/untimestamp" method="post" class="timestamp-form unset-form"
-                                          th:if="${data.eventTime}">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="type" value="event">
-                                        <button type="submit" class="lcars-btn unset-btn">✗</button>
-                                    </form>
-                                    <span class="countdown overdue" th:unless="${data.eventTime}">overdue</span>
+                                <div class="timestamp-info" th:if="${data.eventTime}">
+                                    <span class="countdown" th:data-timestamp="${data.eventTime}" data-type="event">--:--</span>
+                                    <span class="last-updated" th:text="${#temporals.format(data.eventTime, 'HH:mm')}">--:--</span>
                                 </div>
-                            </td>
-                            <td>
-                                <div class="dilithium-cell">
-                                    <span class="dilithium-multiplier" th:data-value="${data.dilithium}" th:class="${'dilithium-multiplier ' + (data.dilithium != null && data.dilithium > 40000 ? 'multiplier-high' : (data.dilithium != null && data.dilithium >= 24000 ? 'multiplier-mid' : 'multiplier-low'))}" th:text="|${data.dilithium != null ? (data.dilithium / 8000) : '0'}x|">0x</span>
-                                    </span>
-                                    <form action="/update" method="post" class="inline-form">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="dilithium" class="dilithium-value" th:value="${data.dilithium}">
-                                        <input type="text"
-                                               min="0"
-                                               class="lcars-input dilithium-input"
-                                               th:value="${data.dilithium}">
-                                    </form>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="timestamp-cell">
-                                    <form action="/timestamp" method="post" class="timestamp-form">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="type" value="refining">
-                                        <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
-                                    </form>
-                                    <div class="timestamp-info" th:if="${data.refiningTime}">
-                                        <span class="countdown" th:data-timestamp="${data.refiningTime}" data-type="refining">--:--</span>
-                                        <span class="last-updated" th:text="${#temporals.format(data.refiningTime, 'HH:mm')}">--:--</span>
-                                    </div>
-                                    <form action="/untimestamp" method="post" class="timestamp-form unset-form"
-                                          th:if="${data.refiningTime}">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="type" value="refining">
-                                        <button type="submit" class="lcars-btn unset-btn">✗</button>
-                                    </form>
-                                    <span class="countdown overdue" th:unless="${data.refiningTime}">overdue</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="timestamp-cell">
-                                    <form action="/timestamp" method="post" class="timestamp-form">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="type" value="recruitment">
-                                        <button type="submit" class="lcars-btn timestamp-btn set-btn">✓</button>
-                                    </form>
-                                    <div class="timestamp-info" th:if="${data.recruitmentTime}">
-                                        <span class="countdown" th:data-timestamp="${data.recruitmentTime}" data-type="recruitment">--:--</span>
-                                        <span class="last-updated" th:text="${#temporals.format(data.recruitmentTime, 'HH:mm')}">--:--</span>
-                                    </div>
-                                    <form action="/untimestamp" method="post" class="timestamp-form unset-form"
-                                          th:if="${data.recruitmentTime}">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="type" value="recruitment">
-                                        <button type="submit" class="lcars-btn unset-btn">✗</button>
-                                    </form>
-                                    <span class="unset-label" th:unless="${data.recruitmentTime}">unset</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="credits-cell">
-                                    <form action="/update" method="post" class="inline-form">
-                                        <input type="hidden" name="id" th:value="${data.id}">
-                                        <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
-                                        <input type="text"
-                                               min="0"
-                                               class="lcars-input credits-input"
-                                               th:value="${data.credits}">
-                                    </form>
-                                    <span class="credits-warning"
-                                          th:data-value="${data.credits}">
-                                        <span th:if="${data.credits != null && data.credits < 100000}" class="warning-critical">🚨</span>
-                                        <span th:if="${data.credits != null && data.credits >= 100000 && data.credits < 1000000}" class="warning-low">⚠️</span>
-                                    </span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(stoDataList)}">
-                            <td colspan="7" class="empty-message">No characters tracked yet - Add a character above</td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <form action="/untimestamp" method="post" class="timestamp-form unset-form"
+                                      th:if="${data.eventTime}">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="type" value="event">
+                                    <button type="submit" class="unset-btn">✗</button>
+                                </form>
+                                <span class="countdown overdue" th:unless="${data.eventTime}">overdue</span>
+                            </div>
+                        </td>
 
-                <!-- Add Character Form - below table, right aligned -->
-                <div class="table-footer">
-                    <form class="add-form" action="/add" method="post">
-                        <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
-                        <button type="submit" class="lcars-btn add-btn-header">ADD</button>
-                    </form>
-                </div>
+                        <!-- Dilithium Column -->
+                        <td>
+                            <div class="dilithium-cell">
+                                <span class="lcars-badge"
+                                      th:class="${'lcars-badge ' + (data.dilithium != null && data.dilithium > 40000 ? 'lcars-badge-high' : (data.dilithium != null && data.dilithium >= 24000 ? 'lcars-badge-mid' : 'lcars-badge-low'))}"
+                                      th:text="|${data.dilithium != null ? (data.dilithium / 8000) : '0'}x|">0x</span>
+                                <form action="/update" method="post" class="inline-form">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="dilithium" class="dilithium-value" th:value="${data.dilithium}">
+                                    <input type="text"
+                                           min="0"
+                                           class="lcars-input dilithium-input"
+                                           th:value="${data.dilithium}">
+                                </form>
+                            </div>
+                        </td>
+
+                        <!-- Refining Column -->
+                        <td>
+                            <div class="timestamp-cell">
+                                <form action="/timestamp" method="post" class="timestamp-form">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="type" value="refining">
+                                    <button type="submit" class="timestamp-btn set-btn">✓</button>
+                                </form>
+                                <div class="timestamp-info" th:if="${data.refiningTime}">
+                                    <span class="countdown" th:data-timestamp="${data.refiningTime}" data-type="refining">--:--</span>
+                                    <span class="last-updated" th:text="${#temporals.format(data.refiningTime, 'HH:mm')}">--:--</span>
+                                </div>
+                                <form action="/untimestamp" method="post" class="timestamp-form unset-form"
+                                      th:if="${data.refiningTime}">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="type" value="refining">
+                                    <button type="submit" class="unset-btn">✗</button>
+                                </form>
+                                <span class="countdown overdue" th:unless="${data.refiningTime}">overdue</span>
+                            </div>
+                        </td>
+
+                        <!-- Recruitment Column -->
+                        <td>
+                            <div class="timestamp-cell">
+                                <form action="/timestamp" method="post" class="timestamp-form">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="type" value="recruitment">
+                                    <button type="submit" class="timestamp-btn set-btn">✓</button>
+                                </form>
+                                <div class="timestamp-info" th:if="${data.recruitmentTime}">
+                                    <span class="countdown" th:data-timestamp="${data.recruitmentTime}" data-type="recruitment">--:--</span>
+                                    <span class="last-updated" th:text="${#temporals.format(data.recruitmentTime, 'HH:mm')}">--:--</span>
+                                </div>
+                                <form action="/untimestamp" method="post" class="timestamp-form unset-form"
+                                      th:if="${data.recruitmentTime}">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="type" value="recruitment">
+                                    <button type="submit" class="unset-btn">✗</button>
+                                </form>
+                                <span class="unset-label" th:unless="${data.recruitmentTime}">UNSET</span>
+                            </div>
+                        </td>
+
+                        <!-- Credits Column -->
+                        <td>
+                            <div class="credits-cell">
+                                <form action="/update" method="post" class="inline-form">
+                                    <input type="hidden" name="id" th:value="${data.id}">
+                                    <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
+                                    <input type="text"
+                                           min="0"
+                                           class="lcars-input credits-input"
+                                           th:value="${data.credits}">
+                                </form>
+                                <span class="credits-warning"
+                                      th:data-value="${data.credits}">
+                                    <span th:if="${data.credits != null && data.credits < 100000}" class="warning-critical">🚨</span>
+                                    <span th:if="${data.credits != null && data.credits >= 100000 && data.credits < 1000000}" class="warning-low">⚠️</span>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Empty State -->
+                    <tr th:if="${#lists.isEmpty(stoDataList)}">
+                        <td colspan="7" class="empty-message">No characters tracked yet - Add a character above</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Add Form - Bottom of page above footer -->
+            <div class="lcars-add-form-bottom">
+                <form class="add-form" action="/add" method="post">
+                    <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
+                    <button type="submit" class="lcars-btn-pill">ADD</button>
+                </form>
             </div>
 
             <!-- Footer -->
+            <footer class="lcars-footer">
+                <div class="lcars-footer-right">
+                    <span class="lcars-clock-label">CET</span>
+                    <span class="lcars-clock" id="clock">00:00</span>
+                </div>
+            </footer>
         </main>
     </div>
 

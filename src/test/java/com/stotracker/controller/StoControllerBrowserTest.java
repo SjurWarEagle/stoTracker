@@ -128,12 +128,12 @@ class StoControllerBrowserTest {
         assertEquals(2, overdueElements.size(),
                 "Should have 2 overdue elements (event and refining)");
 
-        // Recruitment shows "unset" since it's a 20-min timer, not a daily deadline
+        // Recruitment shows "UNSET" since it's a 20-min timer, not a daily deadline
         // Find the unset-label element anywhere in the row
         WebElement unsetLabel = row.findElement(By.cssSelector(".unset-label"));
         assertNotNull(unsetLabel, "Recruitment unset label should exist");
-        assertEquals("unset", unsetLabel.getText().trim(),
-                "Recruitment should show 'unset' for new character");
+        assertEquals("UNSET", unsetLabel.getText().trim(),
+                "Recruitment should show 'UNSET' for new character");
     }
 
     @Test
@@ -150,25 +150,55 @@ class StoControllerBrowserTest {
         assertNotNull(row1);
         assertNotNull(row2);
 
-        // Click first row - should highlight
-        row1.findElement(By.cssSelector(".name-cell")).click();
+        WebElement cell1 = row1.findElement(By.cssSelector(".name-cell"));
+        WebElement cell2 = row2.findElement(By.cssSelector(".name-cell"));
+
+        // Click first cell - should highlight the row
+        cell1.click();
         waitForPageLoad();
         assertTrue(row1.getAttribute("class").contains("highlighted"),
                 "First row should be highlighted after click");
 
-        // Click second row - first should lose highlight, second should gain
-        row2.findElement(By.cssSelector(".name-cell")).click();
+        // Click second cell - first should lose highlight, second should gain
+        cell2.click();
         waitForPageLoad();
         assertFalse(row1.getAttribute("class").contains("highlighted"),
                 "First row should lose highlight when second is clicked");
         assertTrue(row2.getAttribute("class").contains("highlighted"),
                 "Second row should be highlighted");
 
-        // Click second row again - should remove highlight
-        row2.findElement(By.cssSelector(".name-cell")).click();
+        // Click second cell again - should remove highlight
+        cell2.click();
         waitForPageLoad();
         assertFalse(row2.getAttribute("class").contains("highlighted"),
                 "Second row should lose highlight when clicked again");
+    }
+
+    @Test
+    void rowHighlight_preservesHighlightAfterDataChange() {
+        // Create character and highlight it
+        createCharacter(TEST_CHAR_NAME);
+        assertCharacterExistsInTable(TEST_CHAR_NAME);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        WebElement cell = row.findElement(By.cssSelector(".name-cell"));
+
+        // Click to highlight
+        cell.click();
+        waitForPageLoad();
+        assertTrue(row.getAttribute("class").contains("highlighted"),
+                "Row should be highlighted before data change");
+
+        // Change dilithium value
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+        updateDilithium(charId, 50000);
+
+        // Highlight should persist after form submit/reload
+        driver.get(BASE_URL + port);
+        row = findCharacterRow(TEST_CHAR_NAME);
+        assertTrue(row.getAttribute("class").contains("highlighted"),
+                "Row should still be highlighted after data change");
     }
 
     @Test
@@ -319,11 +349,11 @@ class StoControllerBrowserTest {
         driver.get(BASE_URL + port);
         waitForPageLoad();
 
-        WebElement multiplier = driver.findElement(By.cssSelector(".dilithium-multiplier"));
+        WebElement multiplier = driver.findElement(By.cssSelector(".lcars-badge"));
         assertNotNull(multiplier);
         assertEquals("10x", multiplier.getText().trim());
-        assertTrue(multiplier.getAttribute("class").contains("multiplier-high"),
-                "Expected green (multiplier-high) for 10x but got: " + multiplier.getAttribute("class"));
+        assertTrue(multiplier.getAttribute("class").contains("lcars-badge-high"),
+                "Expected green (lcars-badge-high) for 10x but got: " + multiplier.getAttribute("class"));
     }
 
     @Test
@@ -339,11 +369,11 @@ class StoControllerBrowserTest {
         driver.get(BASE_URL + port);
         waitForPageLoad();
 
-        WebElement multiplier = driver.findElement(By.cssSelector(".dilithium-multiplier"));
+        WebElement multiplier = driver.findElement(By.cssSelector(".lcars-badge"));
         assertNotNull(multiplier);
         assertEquals("4x", multiplier.getText().trim());
-        assertTrue(multiplier.getAttribute("class").contains("multiplier-mid"),
-                "Expected orange (multiplier-mid) for 4x but got: " + multiplier.getAttribute("class"));
+        assertTrue(multiplier.getAttribute("class").contains("lcars-badge-mid"),
+                "Expected orange (lcars-badge-mid) for 4x but got: " + multiplier.getAttribute("class"));
     }
 
     @Test
@@ -359,11 +389,11 @@ class StoControllerBrowserTest {
         driver.get(BASE_URL + port);
         waitForPageLoad();
 
-        WebElement multiplier = driver.findElement(By.cssSelector(".dilithium-multiplier"));
+        WebElement multiplier = driver.findElement(By.cssSelector(".lcars-badge"));
         assertNotNull(multiplier);
         assertEquals("2x", multiplier.getText().trim());
-        assertTrue(multiplier.getAttribute("class").contains("multiplier-low"),
-                "Expected red (multiplier-low) for 2x but got: " + multiplier.getAttribute("class"));
+        assertTrue(multiplier.getAttribute("class").contains("lcars-badge-low"),
+                "Expected red (lcars-badge-low) for 2x but got: " + multiplier.getAttribute("class"));
     }
 
     @Test
@@ -445,7 +475,7 @@ class StoControllerBrowserTest {
         assertNotNull(row);
 
         // Verify initial multiplier
-        WebElement multiplier = row.findElement(By.cssSelector(".dilithium-multiplier"));
+        WebElement multiplier = row.findElement(By.cssSelector(".lcars-badge"));
         assertEquals("1x", multiplier.getText().trim());
 
         // Change dilithium via UI
@@ -460,9 +490,9 @@ class StoControllerBrowserTest {
 
         // Verify multiplier updated to 6x (green)
         row = findCharacterRow(TEST_CHAR_NAME);
-        multiplier = row.findElement(By.cssSelector(".dilithium-multiplier"));
+        multiplier = row.findElement(By.cssSelector(".lcars-badge"));
         assertEquals("6x", multiplier.getText().trim());
-        assertTrue(multiplier.getAttribute("class").contains("multiplier-high"),
+        assertTrue(multiplier.getAttribute("class").contains("lcars-badge-high"),
                 "Expected green for 6x but got: " + multiplier.getAttribute("class"));
     }
 
@@ -550,7 +580,7 @@ class StoControllerBrowserTest {
         WebElement unsetLabel = row.findElement(By.cssSelector(
                 ".unset-label"));
         assertNotNull(unsetLabel);
-        assertEquals("unset", unsetLabel.getText());
+        assertEquals("UNSET", unsetLabel.getText());
 
         // Verify in DB
         Optional<StoData> clearedTimestamp = repository.findById(charId);

@@ -1,11 +1,35 @@
-// Toggle row highlight on click (yellow glow)
-// Only one row highlighted at a time
+// Row highlighting - click on name cell to highlight entire row
+// Only one row highlighted at a time, persisted in sessionStorage
+const HIGHLIGHT_KEY = 'sto-highlighted-name';
+
+function getHighlightedName() {
+    return sessionStorage.getItem(HIGHLIGHT_KEY);
+}
+
+function restoreHighlight() {
+    const highlightedName = getHighlightedName();
+    if (!highlightedName) return;
+
+    document.querySelectorAll('.name-cell').forEach(cell => {
+        if (cell.textContent.trim() === highlightedName) {
+            // Add highlighted class to the parent TR
+            const row = cell.closest('tr');
+            if (row) {
+                row.classList.add('highlighted');
+            }
+        }
+    });
+}
+
 function toggleRowHighlight(nameCell) {
+    const cell = nameCell.closest('.name-cell');
     const row = nameCell.closest('tr');
+    const name = cell.textContent.trim();
 
     // If clicking already-highlighted row, remove highlight
-    if (row.classList.contains('highlighted')) {
+    if (row && row.classList.contains('highlighted')) {
         row.classList.remove('highlighted');
+        sessionStorage.removeItem(HIGHLIGHT_KEY);
         return;
     }
 
@@ -14,8 +38,11 @@ function toggleRowHighlight(nameCell) {
         r.classList.remove('highlighted');
     });
 
-    // Add highlight to clicked row
-    row.classList.add('highlighted');
+    // Add highlight to clicked row and persist
+    if (row) {
+        row.classList.add('highlighted');
+        sessionStorage.setItem(HIGHLIGHT_KEY, name);
+    }
 }
 
 // Live clock updates every second (CET timezone)
@@ -93,6 +120,7 @@ function updateCountdowns() {
 function update() {
     updateClock();
     updateCountdowns();
+    restoreHighlight();
 }
 update();
 setInterval(update, 1000);
@@ -138,17 +166,17 @@ document.querySelectorAll('.inline-form').forEach(function(form) {
         // Update dilithium multiplier
         const dilithiumCell = input.closest('.dilithium-cell');
         if (dilithiumCell) {
-            const multiplierEl = dilithiumCell.querySelector('.dilithium-multiplier');
+            const multiplierEl = dilithiumCell.querySelector('.lcars-badge');
             if (multiplierEl) {
                 const multiplier = Math.floor(value / 8000);
                 multiplierEl.textContent = multiplier + 'x';
-                multiplierEl.classList.remove('multiplier-high', 'multiplier-mid', 'multiplier-low');
+                multiplierEl.classList.remove('lcars-badge-high', 'lcars-badge-mid', 'lcars-badge-low');
                 if (multiplier > 5) {
-                    multiplierEl.classList.add('multiplier-high');
+                    multiplierEl.classList.add('lcars-badge-high');
                 } else if (multiplier >= 3) {
-                    multiplierEl.classList.add('multiplier-mid');
+                    multiplierEl.classList.add('lcars-badge-mid');
                 } else {
-                    multiplierEl.classList.add('multiplier-low');
+                    multiplierEl.classList.add('lcars-badge-low');
                 }
             }
         }
