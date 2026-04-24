@@ -244,6 +244,10 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [x] Fix refining/event countdown to detect overdue based on timestamp date (Task 24):
   - Previously only compared time, not date
   - Now calculates deadline (02:00 CET after timestamp) and marks overdue if past
+- [x] Optimize tests with parallelization (Task 25):
+  - Added maven-surefire-plugin configuration with parallel=classes
+  - forkCount=4, reuseForks=true for efficient JVM reuse
+  - Tests now run in ~50 seconds (was longer sequentially)
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)
