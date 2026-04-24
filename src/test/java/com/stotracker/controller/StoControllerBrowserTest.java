@@ -113,6 +113,65 @@ class StoControllerBrowserTest {
     }
 
     @Test
+    void newCharacter_showsOverdueForRefiningAndEvent_notUnset() {
+        // Create new character
+        createCharacter(TEST_CHAR_NAME);
+        assertCharacterExistsInTable(TEST_CHAR_NAME);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        // For unset (new character), event and refining show "overdue" in red
+        // They appear as <span class="countdown overdue">overdue</span>
+        java.util.List<WebElement> overdueElements = row.findElements(By.cssSelector(".countdown.overdue"));
+        assertEquals(2, overdueElements.size(),
+                "Should have 2 overdue elements (event and refining)");
+
+        // Recruitment shows "unset" since it's a 20-min timer, not a daily deadline
+        // Find the unset-label element anywhere in the row
+        WebElement unsetLabel = row.findElement(By.cssSelector(".unset-label"));
+        assertNotNull(unsetLabel, "Recruitment unset label should exist");
+        assertEquals("unset", unsetLabel.getText().trim(),
+                "Recruitment should show 'unset' for new character");
+    }
+
+    @Test
+    void rowHighlight_singleHighlight_toggleOffOnSecondClick() {
+        // Create two characters
+        createCharacter(TEST_CHAR_NAME);
+        createCharacter(TEST_CHAR_NAME + "-2");
+        assertCharacterExistsInTable(TEST_CHAR_NAME);
+        assertCharacterExistsInTable(TEST_CHAR_NAME + "-2");
+
+        driver.get(BASE_URL + port);
+        WebElement row1 = findCharacterRow(TEST_CHAR_NAME);
+        WebElement row2 = findCharacterRow(TEST_CHAR_NAME + "-2");
+        assertNotNull(row1);
+        assertNotNull(row2);
+
+        // Click first row - should highlight
+        row1.findElement(By.cssSelector(".name-cell")).click();
+        waitForPageLoad();
+        assertTrue(row1.getAttribute("class").contains("highlighted"),
+                "First row should be highlighted after click");
+
+        // Click second row - first should lose highlight, second should gain
+        row2.findElement(By.cssSelector(".name-cell")).click();
+        waitForPageLoad();
+        assertFalse(row1.getAttribute("class").contains("highlighted"),
+                "First row should lose highlight when second is clicked");
+        assertTrue(row2.getAttribute("class").contains("highlighted"),
+                "Second row should be highlighted");
+
+        // Click second row again - should remove highlight
+        row2.findElement(By.cssSelector(".name-cell")).click();
+        waitForPageLoad();
+        assertFalse(row2.getAttribute("class").contains("highlighted"),
+                "Second row should lose highlight when clicked again");
+    }
+
+    @Test
     void numberInput_GermanLocale_acceptsAndSubmitsGermanFormat() {
         // Create character
         createCharacter(TEST_CHAR_NAME);
@@ -532,7 +591,7 @@ class StoControllerBrowserTest {
     private WebElement findCharacterRow(String name) {
         try {
             return driver.findElement(By.xpath(
-                    "//tr[td[@class='name-cell'][text()='" + name + "']]"));
+                    "//tr[td[contains(@class,'name-cell')][text()='" + name + "']]"));
         } catch (org.openqa.selenium.NoSuchElementException e) {
             return null;
         }

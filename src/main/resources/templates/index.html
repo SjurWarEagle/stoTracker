@@ -75,7 +75,7 @@
                                     <button type="submit" class="lcars-btn delete-btn">X</button>
                                 </form>
                             </td>
-                            <td class="name-cell" th:text="${data.name}">Name</td>
+                            <td class="name-cell clickable" th:text="${data.name}" onclick="toggleRowHighlight(this)">Name</td>
                             <td>
                                 <div class="timestamp-cell">
                                     <form action="/timestamp" method="post" class="timestamp-form">

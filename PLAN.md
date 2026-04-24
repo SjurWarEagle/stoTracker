@@ -248,6 +248,16 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Added maven-surefire-plugin configuration with parallel=classes
   - forkCount=4, reuseForks=true for efficient JVM reuse
   - Tests now run in ~50 seconds (was longer sequentially)
+- [x] Row highlighting feature (Task 26):
+  - Click on name cell to highlight row with yellow glow
+  - Only one row highlighted at a time
+  - Click same row again to remove highlight
+  - Highlight is client-side only (not stored in DB)
+  - CSS: yellow glow via box-shadow and semi-transparent background
+  - JS: toggleRowHighlight() function added to time.js
+- [x] UI test for row highlighting (Task 27):
+  - Browser test verifies single highlight, toggle off on second click
+  - Verifies clicking different row transfers highlight
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

@@ -1,3 +1,23 @@
+// Toggle row highlight on click (yellow glow)
+// Only one row highlighted at a time
+function toggleRowHighlight(nameCell) {
+    const row = nameCell.closest('tr');
+
+    // If clicking already-highlighted row, remove highlight
+    if (row.classList.contains('highlighted')) {
+        row.classList.remove('highlighted');
+        return;
+    }
+
+    // Remove highlight from all other rows
+    document.querySelectorAll('tr.highlighted').forEach(r => {
+        r.classList.remove('highlighted');
+    });
+
+    // Add highlight to clicked row
+    row.classList.add('highlighted');
+}
+
 // Live clock updates every second (CET timezone)
 function updateClock() {
     const now = new Date();

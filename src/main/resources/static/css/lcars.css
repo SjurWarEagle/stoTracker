@@ -739,6 +739,19 @@ html, body {
     font-size: 15px;
 }
 
+.name-cell.clickable {
+    cursor: pointer;
+}
+
+tr.highlighted {
+    background-color: rgba(250, 170, 0, 0.25) !important;
+    box-shadow: 0 0 15px rgba(250, 170, 0, 0.5);
+}
+
+tr.highlighted .name-cell {
+    color: var(--lcars-yellow);
+}
+
 /* ===========================
    INPUTS
    =========================== */
