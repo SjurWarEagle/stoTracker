@@ -9,38 +9,44 @@
 </head>
 <body>
     <div class="lcars-app">
-        <!-- LCARS Left Sidebar Frame -->
-        <aside class="lcars-sidebar">
-            <!-- Elbow Panel with rounded outer corner -->
-            <div class="panel-0">
-                <div class="panel-0-title">STARFLEET</div>
-                <div class="panel-0-subtitle">🖖 Daily Tasks</div>
-            </div>
+        <!-- Content row: sidebar + main -->
+        <div class="lcars-content-row">
+            <!-- LCARS Left Sidebar Frame -->
+            <aside class="lcars-sidebar">
+                <!-- Elbow Panel with rounded outer corner -->
+                <div class="panel-0">
+                    <div class="panel-0-title">STARFLEET</div>
+                    <div class="panel-0-subtitle">🖖 Daily Tasks</div>
+                    <div class="panel-0-clock">
+                        <span class="lcars-clock-label">CET</span>
+                        <span class="lcars-clock" id="clock">00:00</span>
+                    </div>
+                </div>
 
-            <!-- Panel Segments -->
-            <div class="panel-group">
-                <div class="panel-segment panel-segment-blue">LV-426</div>
-                <div class="panel-segment panel-segment-violet">NX-01</div>
-                <div class="panel-segment panel-segment-red">NCC-1701</div>
-                <div class="panel-segment panel-segment-violet">DS9-631</div>
-                <div class="panel-segment panel-segment-yellow">VOY-74656</div>
-                <div class="panel-segment panel-segment-blue">ENT-1701D</div>
-                <div class="panel-segment panel-segment-orange">TNG-2356</div>
-                <div class="panel-segment panel-segment-moonlit">TOS-9711</div>
-                <div class="panel-segment panel-segment-lilac">PIC-2396</div>
-                <div class="panel-segment panel-segment-sky">DIS-2256</div>
-            </div>
+                <!-- Panel Segments -->
+                <div class="panel-group">
+                    <div class="panel-segment panel-segment-blue">LV-426</div>
+                    <div class="panel-segment panel-segment-violet">NX-01</div>
+                    <div class="panel-segment panel-segment-red">NCC-1701</div>
+                    <div class="panel-segment panel-segment-violet">DS9-631</div>
+                    <div class="panel-segment panel-segment-yellow">VOY-74656</div>
+                    <div class="panel-segment panel-segment-blue">ENT-1701D</div>
+                    <div class="panel-segment panel-segment-orange">TNG-2356</div>
+                    <div class="panel-segment panel-segment-moonlit">TOS-9711</div>
+                    <div class="panel-segment panel-segment-lilac">PIC-2396</div>
+                    <div class="panel-segment panel-segment-sky">DIS-2256</div>
+                </div>
 
-            <!-- Version Info -->
-            <div class="panel-build-info">v1.0</div>
-        </aside>
+                <!-- Version Info -->
+                <div class="panel-build-info">v1.0</div>
+            </aside>
 
-        <!-- Header Panel - spans full width -->
-        <div class="lcars-header-panel"></div>
+            <!-- Main Content -->
+            <main class="lcars-main">
+                <!-- Header Panel - top of main content -->
+                <div class="lcars-top-header"></div>
 
-        <!-- Main Content -->
-        <main class="lcars-main">
-            <!-- Flash Messages -->
+                <!-- Flash Messages -->
             <div class="flash-messages" th:if="${flashSuccess}">
                 <div class="flash-success" th:text="${flashSuccess}">Success message</div>
             </div>
@@ -49,7 +55,8 @@
             </div>
 
             <!-- Data Table -->
-            <table class="lcars-table">
+            <div class="lcars-table-wrapper">
+                <table class="lcars-table">
                 <thead>
                     <tr>
                         <th>DELETE</th>
@@ -184,6 +191,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div><!-- end lcars-table-wrapper -->
 
             <!-- Add Form - Bottom of page above footer -->
             <div class="lcars-add-form-bottom">
@@ -195,13 +203,11 @@
 
             <!-- Footer -->
             <footer class="lcars-footer">
-                <div class="lcars-footer-right">
-                    <span class="lcars-clock-label">CET</span>
-                    <span class="lcars-clock" id="clock">00:00</span>
-                </div>
+                <div class="lcars-footer-right"></div>
             </footer>
         </main>
-    </div>
+        </div><!-- end lcars-content-row -->
+    </div><!-- end lcars-app -->
 
     <script th:src="@{/js/time.js}"></script>
 </body>

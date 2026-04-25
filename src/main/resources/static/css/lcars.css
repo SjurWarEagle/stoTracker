@@ -68,7 +68,14 @@ html, body {
 
 .lcars-app {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
+}
+
+/* Content row: sidebar + main content side by side */
+.lcars-content-row {
+    display: flex;
+    flex: 1;
 }
 
 /* ===========================
@@ -91,7 +98,8 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: var(--space-lg);
+    align-items: flex-end;
+    padding-right: var(--space-lg);
 }
 
 .panel-0-title {
@@ -100,12 +108,37 @@ html, body {
     color: var(--lcars-bg);
     text-transform: uppercase;
     letter-spacing: 2px;
+    text-align: right;
 }
 
 .panel-0-subtitle {
     font-size: 11px;
     color: var(--lcars-bg);
     opacity: 0.8;
+    text-align: right;
+}
+
+/* Clock inside panel-0 */
+.panel-0-clock {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+}
+
+.panel-0-clock .lcars-clock {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--lcars-bg);
+    letter-spacing: 2px;
+}
+
+.panel-0-clock .lcars-clock-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lcars-bg);
+    opacity: 0.7;
 }
 
 /* Panel group with various LCARS segments */
@@ -186,16 +219,13 @@ html, body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: var(--space-lg) var(--space-xl) 0;
+    padding: 0;
 }
 
-/* Header Panel - spans full width */
-.lcars-header-panel {
+/* Top Header - Orange bar edge to edge, same height as panel-0 */
+.lcars-top-header {
     height: 100px;
     background: #ff8800;
-    margin-bottom: var(--space-lg);
-    margin-left: calc(-1 * var(--space-xl));
-    margin-right: calc(-1 * var(--space-xl));
 }
 
 /* Add Form - Bottom of page */
@@ -289,6 +319,10 @@ html, body {
     table-layout: fixed;
     background: var(--lcars-dark);
     border: none;
+}
+
+.lcars-table-wrapper {
+    padding: var(--space-lg) var(--space-xl);
 }
 
 .lcars-table th,
@@ -550,6 +584,7 @@ tr.highlighted {
     border-top: var(--bar-height) solid var(--lcars-orange);
     padding: var(--space-md) var(--space-xl);
     margin: auto calc(-1 * var(--space-xl)) 0;
+    min-height: var(--bar-height);
 }
 
 .lcars-footer-left {
