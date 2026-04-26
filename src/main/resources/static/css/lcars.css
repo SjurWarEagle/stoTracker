@@ -317,7 +317,7 @@ html, body {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    background: var(--lcars-dark);
+    background: #000000;
     border: none;
 }
 
