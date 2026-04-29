@@ -359,7 +359,7 @@ html, body {
 /* Header Row */
 .grid-header {
     display: grid;
-    grid-template-columns: 60px 1fr 100px 100px 100px 100px 120px;
+    grid-template-columns: 60px 1fr 260px 260px 260px 160px 120px;
     gap: 0;
     padding: var(--space-md) 0;
     border-bottom: 4px solid var(--lcars-orange);
@@ -368,7 +368,16 @@ html, body {
 /* Data Row */
 .grid-row {
     display: grid;
-    grid-template-columns: 60px 1fr 100px 100px 100px 100px 120px;
+    grid-template-columns: 60px 1fr 260px 260px 260px 160px 120px;
+    gap: 0;
+    min-height: 48px;
+    align-items: stretch;
+}
+
+/* Data Row */
+.grid-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 200px 200px 200px 140px 120px;
     gap: 0;
     min-height: 48px;
     align-items: center;
@@ -387,8 +396,12 @@ html, body {
 
 /* Grid Cell */
 .grid-cell {
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
     vertical-align: middle;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
 }
 
 /* Header Cell */
@@ -429,9 +442,45 @@ html, body {
    =========================== */
 
 .timestamp-cell {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-sm);
+    justify-content: flex-start;
+    gap: 4px;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 250px;
+}
+
+.timestamp-cell .timestamp-form,
+.timestamp-cell .unset-form {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+.timestamp-cell .timestamp-form *,
+.timestamp-cell .unset-form * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.timestamp-cell .timestamp-info {
+    display: inline-flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-width: 40px;
+    max-width: 60px;
+}
+
+.timestamp-cell .countdown,
+.timestamp-cell .unset-label {
+    flex-shrink: 0;
 }
 
 /* LCARS Set Button - pill start */
@@ -439,16 +488,18 @@ html, body {
     background: var(--lcars-blue);
     color: var(--lcars-bg);
     border: none;
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-family: var(--font-main);
     font-size: 14px;
     font-weight: 700;
     border-radius: var(--panel-radius) 0 0 var(--panel-radius);
     cursor: pointer;
     transition: background 0.15s ease;
-    min-width: 32px;
+    width: 36px;
+    height: 28px;
     text-align: center;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .timestamp-btn:hover {
@@ -460,16 +511,18 @@ html, body {
     background: var(--lcars-red);
     color: var(--lcars-text);
     border: none;
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-family: var(--font-main);
     font-size: 14px;
     font-weight: 700;
     border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
     cursor: pointer;
     transition: background 0.15s ease;
-    min-width: 32px;
+    width: 36px;
+    height: 28px;
     text-align: center;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .unset-btn:hover {
@@ -481,7 +534,9 @@ html, body {
 .timestamp-info {
     display: flex;
     flex-direction: column;
-    min-width: 50px;
+    min-width: 40px;
+    max-width: 50px;
+    flex-shrink: 0;
 }
 
 .countdown {
