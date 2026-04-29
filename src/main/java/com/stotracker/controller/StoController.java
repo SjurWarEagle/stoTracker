@@ -3,6 +3,8 @@ package com.stotracker.controller;
 import com.stotracker.model.StoData;
 import com.stotracker.service.Result;
 import com.stotracker.service.StoDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import java.util.Map;
 @Controller
 public class StoController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StoController.class);
     private final StoDataService service;
     private final String buildDate;
 
@@ -70,7 +73,8 @@ public class StoController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleError(Exception e) {
+        LOG.error("Unexpected error", e);
         return ResponseEntity.badRequest()
-                .body(Map.of("error", e.getMessage()));
+                .body(Map.of("error", "An unexpected error occurred"));
     }
 }

@@ -265,14 +265,14 @@ class StoDataServiceTest {
         String name = "CharToDelete";
         StoData toDelete = new StoData(name);
         when(repository.findByName(name)).thenReturn(Optional.of(toDelete));
-        doNothing().when(repository).deleteByName(name);
+        doNothing().when(repository).delete(toDelete);
 
         // Act
         Result<StoData> result = service.deleteByName(name);
 
         // Assert
         assertTrue(result.success());
-        verify(repository).deleteByName(name);
+        verify(repository).delete(toDelete);
     }
 
     @Test

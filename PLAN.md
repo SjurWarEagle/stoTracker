@@ -289,6 +289,47 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Header used 260px for timestamp columns but second .grid-row used 200px
   - Now both header and data rows use consistent 260px columns
 
+### Code Review Fixes (2026-04-29)
+
+- [x] **XSS vulnerability in time.js** - `innerHTML` used for emoji insertion in warning elements
+  - Fixed: Changed `innerHTML` to `textContent` with `createTextNode`
+
+- [x] **DST bug in timezone** - `parseCET()` hardcoded UTC+2 offset, didn't handle CET (winter UTC+1)
+  - Fixed: Now uses `toLocaleString('en-US', { timeZone: 'Europe/Berlin' })`
+
+- [x] **Redundant closest() call** - `toggleRowHighlight` called `cell.closest('.name-cell')` on element already named
+  - Fixed: Removed redundant `cell.closest('.name-cell')` call
+
+- [x] **Race condition in deleteByName** - Non-atomic find + deleteByName call
+  - Fixed: Changed to entity-based `delete(data)` instead of `deleteByName(name)`
+
+- [x] **Exception handler leaked info** - Returned `e.getMessage()` directly to clients
+  - Fixed: Now logs error and returns generic message
+
+- [x] **Constants at wrong location** - Constants defined after methods in service class
+  - Fixed: Moved to top of service class
+
+- [x] **Logger naming** - `log` needed to be `LOG` for checkstyle
+  - Fixed: Changed to `LOG`
+
+- [x] **Duplicate constants** - Constants accidentally duplicated when moving them
+  - Fixed: Removed duplicate constants
+
+- [x] **Google Fonts @import** - Blocks CSS parsing, should use `<link>` in HTML
+  - Fixed: Moved `@import` to `<link>` tags in HTML with `preconnect`
+
+- [x] **Browser tests needed updating** - Tests referenced old `formatLocaleNumber`/`parseLocaleNumber`
+  - Fixed: Updated to use new `formatSimpleNumber`/`parseSimpleNumber` names
+
+- [x] **Service test update** - `deleteByName_withValidName_succeeds` needed update
+  - Fixed: Updated to use `delete(entity)` instead of `deleteByName(name)`
+
+- [x] **Timezone countdown bug** - All timestamps showed "--:--" because parseCET() returned wrong values
+  - Fixed: parseCET() now properly extracts Berlin time components and creates UTC date
+  - Fixed: getNext02_00CETAfter() now uses UTC methods for correct day calculations
+  - Fixed: updateCountdowns() now uses getCurrentCET() for consistent timezone handling
+  - All 85 tests now pass
+
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)
 **Complexity:** Medium

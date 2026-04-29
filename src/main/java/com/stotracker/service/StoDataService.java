@@ -12,6 +12,9 @@ import java.util.Optional;
 @Service
 public class StoDataService {
 
+    private static final int MAX_NAME_LENGTH = 50;
+    private static final int MAX_VALUE = Integer.MAX_VALUE;
+
     private final StoDataRepository repository;
 
     public StoDataService(StoDataRepository repository) {
@@ -21,9 +24,6 @@ public class StoDataService {
     public Result<List<StoData>> getAllData() {
         return Result.ok(repository.findAllByOrderByNameAsc());
     }
-
-    private static final int MAX_NAME_LENGTH = 50;
-    private static final int MAX_VALUE = Integer.MAX_VALUE;
 
     @Transactional
     public Result<StoData> addName(String name) {
@@ -79,13 +79,13 @@ public class StoDataService {
             return Result.err("Name cannot be empty");
         }
 
-        Optional<StoData> optData = repository.findByName(name.trim());
-        if (optData.isEmpty()) {
+        StoData data = repository.findByName(name.trim()).orElse(null);
+        if (data == null) {
             return Result.err("Name not found");
         }
 
-        repository.deleteByName(name.trim());
-        return Result.ok(optData.get());
+        repository.delete(data);
+        return Result.ok(data);
     }
 
     @Transactional

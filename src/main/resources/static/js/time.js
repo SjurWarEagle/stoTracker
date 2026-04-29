@@ -22,9 +22,8 @@ function restoreHighlight() {
 }
 
 function toggleRowHighlight(nameCell) {
-    const cell = nameCell.closest('.name-cell');
     const row = nameCell.closest('.grid-row');
-    const name = cell.textContent.trim();
+    const name = nameCell.textContent.trim();
 
     // If clicking already-highlighted row, remove highlight
     if (row && row.classList.contains('highlighted')) {
@@ -54,29 +53,61 @@ function updateClock() {
     document.getElementById('clock').textContent = `${hours}:${minutes}`;
 }
 
+// Get current time in CET timezone
+function getCurrentCET() {
+    const now = new Date();
+    // Get current Berlin time components
+    const berlinStr = now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' });
+    const parts = berlinStr.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+)\s*(AM|PM)/);
+    let [, month, day, year, hours, minutes, seconds, ampm] = parts;
+    month = parseInt(month);
+    day = parseInt(day);
+    year = parseInt(year);
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
+    seconds = parseInt(seconds);
+    if (ampm === 'PM' && hours !== 12) hours += 12;
+    if (ampm === 'AM' && hours === 12) hours = 0;
+    return new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
+}
+
 // Get next 02:00 CET after the given timestamp's date
 // If timestamp is before 02:00 CET, deadline is 02:00 that same day
 // If timestamp is at or after 02:00 CET, deadline is 02:00 next day
 function getNext02_00CETAfter(timestampCET) {
     const baseTime = new Date(timestampCET);
-    baseTime.setHours(2, 0, 0, 0);
+    baseTime.setUTCHours(2, 0, 0, 0);
     if (baseTime.getTime() <= timestampCET.getTime()) {
-        baseTime.setDate(baseTime.getDate() + 1);
+        baseTime.setUTCDate(baseTime.getUTCDate() + 1);
     }
     return baseTime;
 }
 
 // Parse timestamp as CET (server stores times in CET but sends as UTC strings)
+// Properly handles DST by extracting Berlin time components and creating a UTC date
 function parseCET(timestamp) {
-    // Server sends: "2026-04-23T11:20:32.173" which is UTC time (13:20 CET = 11:20 UTC)
-    // We need to add 2 hours to convert UTC back to CET
     const date = new Date(timestamp);
-    // CET is UTC+2 in summer
-    return new Date(date.getTime() + (2 * 60 * 60 * 1000));
+    // Format the date in Berlin timezone to get local components
+    const berlinStr = date.toLocaleString('en-US', { timeZone: 'Europe/Berlin' });
+    // Parse the components (month, day, year, hours, minutes, seconds)
+    const parts = berlinStr.match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+)\s*(AM|PM)/);
+    let [, month, day, year, hours, minutes, seconds, ampm] = parts;
+    month = parseInt(month);
+    day = parseInt(day);
+    year = parseInt(year);
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
+    seconds = parseInt(seconds);
+    if (ampm === 'PM' && hours !== 12) hours += 12;
+    if (ampm === 'AM' && hours === 12) hours = 0;
+    // Create a UTC date using the Berlin time components
+    // This preserves the correct CET/CEST time regardless of browser timezone
+    return new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
 }
 
 // Update countdown timers
 function updateCountdowns() {
+    const nowCET = getCurrentCET();
     document.querySelectorAll('.countdown').forEach(el => {
         const timestamp = el.getAttribute('data-timestamp');
         const type = el.getAttribute('data-type');
@@ -90,12 +121,12 @@ function updateCountdowns() {
         if (type === 'recruitment') {
             // Recruitment: 20 minutes from last updated
             targetTime = new Date(lastUpdated.getTime() + 20 * 60 * 1000);
-            diff = targetTime - new Date();
+            diff = targetTime - nowCET;
         } else if (type === 'refining' || type === 'event') {
             // Refining/Event: deadline is 02:00 CET after the timestamp's date
             // If that deadline has passed, it's overdue
             targetTime = getNext02_00CETAfter(lastUpdated);
-            diff = targetTime - new Date();
+            diff = targetTime - nowCET;
             if (diff < 0) {
                 isOverdue = true;
             }
@@ -127,8 +158,9 @@ setInterval(update, 1000);
 
 // Simple number parsing (no locale-specific formatting)
 function parseSimpleNumber(str) {
-    if (!str) return 0;
-    return Math.round(Number(str.trim()));
+    if (!str) return null;
+    const num = Number(str.trim());
+    return isNaN(num) ? null : Math.round(num);
 }
 
 // Simple number formatting (no locale-specific formatting)
@@ -140,9 +172,10 @@ function formatSimpleNumber(value) {
 document.querySelectorAll('.inline-form').forEach(function(form) {
     const input = form.querySelector('input[type="text"]');
     if (!input) return;
-    input.addEventListener('change', function(e) {
+input.addEventListener('change', function(e) {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
         const value = parseSimpleNumber(input.value);
+        if (value === null) return; // Invalid input, don't submit
         hiddenInput.value = value;
         input.value = formatSimpleNumber(value);
 
@@ -169,13 +202,12 @@ document.querySelectorAll('.inline-form').forEach(function(form) {
         if (creditsCell) {
             const warningEl = creditsCell.querySelector('.credits-warning');
             if (warningEl) {
-                let html = '';
+                warningEl.textContent = '';
                 if (value < 100000) {
-                    html = '<span class="warning-critical">🚨</span>';
+                    warningEl.appendChild(document.createTextNode('🚨'));
                 } else if (value < 1000000) {
-                    html = '<span class="warning-low">⚠️</span>';
+                    warningEl.appendChild(document.createTextNode('⚠️'));
                 }
-                warningEl.innerHTML = html;
             }
         }
 
