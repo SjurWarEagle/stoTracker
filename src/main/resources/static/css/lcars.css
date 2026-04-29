@@ -448,6 +448,7 @@ html, body {
     transition: background 0.15s ease;
     min-width: 32px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .timestamp-btn:hover {
@@ -468,6 +469,7 @@ html, body {
     transition: background 0.15s ease;
     min-width: 32px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .unset-btn:hover {
