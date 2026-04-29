@@ -361,7 +361,8 @@ html, body {
     display: grid;
     grid-template-columns: 60px 1fr 260px 260px 260px 160px 120px;
     gap: 0;
-    padding: var(--space-md) 0;
+    padding: 0;
+    align-items: center;
     border-bottom: 4px solid var(--lcars-orange);
 }
 
@@ -369,15 +370,6 @@ html, body {
 .grid-row {
     display: grid;
     grid-template-columns: 60px 1fr 260px 260px 260px 160px 120px;
-    gap: 0;
-    min-height: 48px;
-    align-items: stretch;
-}
-
-/* Data Row */
-.grid-row {
-    display: grid;
-    grid-template-columns: 60px 1fr 200px 200px 200px 140px 120px;
     gap: 0;
     min-height: 48px;
     align-items: center;
@@ -402,6 +394,7 @@ html, body {
     width: 100%;
     box-sizing: border-box;
     overflow: visible;
+    text-align: center;
 }
 
 /* Header Cell */
@@ -412,6 +405,9 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Empty Row */
@@ -444,7 +440,7 @@ html, body {
 .timestamp-cell {
     display: inline-flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 4px;
     flex-wrap: nowrap;
     width: 100%;

@@ -125,32 +125,15 @@ function update() {
 update();
 setInterval(update, 1000);
 
-// Parse locale-aware number input (accepts both German 10.000 and American 10,000 formats)
-function parseLocaleNumber(str) {
+// Simple number parsing (no locale-specific formatting)
+function parseSimpleNumber(str) {
     if (!str) return 0;
-    // Detect format: if string contains both '.' and ',', last separator is likely thousands
-    // German: 1.234.567 (dots for thousands), American: 1,234,567 (commas for thousands)
-    // Strategy: find the last non-digit separator, assume it's thousands separator
-    // The other separator (if exists) is decimal separator
-    const cleanStr = str.trim();
-    const lastDot = cleanStr.lastIndexOf('.');
-    const lastComma = cleanStr.lastIndexOf(',');
-
-    if (lastDot > lastComma) {
-        // Dot is thousands separator (German style: 1.234.567)
-        return Math.round(Number(cleanStr.replace(/\./g, '').replace(',', '.')));
-    } else if (lastComma > lastDot) {
-        // Comma is thousands separator (American style: 1,234,567)
-        return Math.round(Number(cleanStr.replace(/,/g, '')));
-    } else {
-        // No thousands separator found, just parse
-        return Math.round(Number(cleanStr));
-    }
+    return Math.round(Number(str.trim()));
 }
 
-// Format number using user's locale
-function formatLocaleNumber(value) {
-    return Number(value).toLocaleString(navigator.language);
+// Simple number formatting (no locale-specific formatting)
+function formatSimpleNumber(value) {
+    return Number(value).toString();
 }
 
 // Auto-submit numeric input forms on change
@@ -159,9 +142,9 @@ document.querySelectorAll('.inline-form').forEach(function(form) {
     if (!input) return;
     input.addEventListener('change', function(e) {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        const value = parseLocaleNumber(input.value);
+        const value = parseSimpleNumber(input.value);
         hiddenInput.value = value;
-        input.value = formatLocaleNumber(value);
+        input.value = formatSimpleNumber(value);
 
         // Update dilithium multiplier
         const dilithiumCell = input.closest('.dilithium-cell');
@@ -200,7 +183,7 @@ document.querySelectorAll('.inline-form').forEach(function(form) {
     });
     input.addEventListener('blur', function() {
         const hiddenInput = form.querySelector('.dilithium-value, .credits-value');
-        hiddenInput.value = parseLocaleNumber(input.value);
-        input.value = formatLocaleNumber(hiddenInput.value);
+        hiddenInput.value = parseSimpleNumber(input.value);
+        input.value = formatSimpleNumber(hiddenInput.value);
     });
 });

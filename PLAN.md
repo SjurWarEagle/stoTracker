@@ -278,6 +278,16 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - No scrolling (overflow: hidden on html/body)
   - Row highlighting updated to use .grid-row class
   - Browser tests updated to use div-based xpath selectors
+- [x] Remove locale-aware number formatting (Task 32):
+  - Removed parseLocaleNumber() which handled German (10.000) and American (10,000) formats
+  - Removed formatLocaleNumber() which used navigator.language
+  - Replaced with simple parseSimpleNumber() - just parses input as Number and rounds
+  - Replaced with simple formatSimpleNumber() - just returns raw number as string
+  - Number fields now show raw integers without any formatting
+- [x] Fix CSS Grid header/data misalignment (Bug fix):
+  - Removed duplicate .grid-row definition with different column widths
+  - Header used 260px for timestamp columns but second .grid-row used 200px
+  - Now both header and data rows use consistent 260px columns
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

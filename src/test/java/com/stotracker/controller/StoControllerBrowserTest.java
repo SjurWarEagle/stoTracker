@@ -207,13 +207,13 @@ class StoControllerBrowserTest {
         createCharacter(TEST_CHAR_NAME);
         Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
 
-        // In German locale, enter number with German thousand separator (period)
+        // With simple formatting, enter plain number
         driver.get(BASE_URL + port);
 
         WebElement input = driver.findElement(By.cssSelector("input.dilithium-input"));
         // Use JavaScript to set value directly
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "arguments[0].value = '34.780';", input);
+                "arguments[0].value = '34780';", input);
         // Trigger change event via JavaScript
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", input);
@@ -305,7 +305,7 @@ class StoControllerBrowserTest {
 
         WebElement input = row.findElement(By.cssSelector("input.credits-input"));
 
-        // Trigger blur to invoke the formatting via formatLocaleNumber()
+        // Trigger blur to invoke the formatting via formatSimpleNumber()
         input.click();
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].dispatchEvent(new Event('blur', {bubbles: true}));", input);
@@ -313,18 +313,18 @@ class StoControllerBrowserTest {
 
         String displayedValue = input.getAttribute("value");
 
-        // Get expected format from browser's navigator.language
+        // Get expected format (simple number as string)
         String expectedFormat = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "return Number(1234567).toLocaleString(navigator.language);");
-        String directLocaleFormat = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "return formatLocaleNumber(1234567);");
+                "return formatSimpleNumber(1234567);");
+        String directSimpleFormat = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return formatSimpleNumber(1234567);");
 
         assertEquals(expectedFormat, displayedValue,
-                "Displayed credits should match toLocaleString(navigator.language): " + displayedValue);
-        assertEquals(expectedFormat, directLocaleFormat,
-                "formatLocaleNumber should produce same result as toLocaleString(navigator.language)");
-        assertEquals(expectedFormat, directLocaleFormat,
-                "formatLocaleNumber should produce same result as displayed value");
+                "Displayed credits should match formatSimpleNumber(): " + displayedValue);
+        assertEquals(expectedFormat, directSimpleFormat,
+                "formatSimpleNumber should produce same result");
+        assertEquals(expectedFormat, directSimpleFormat,
+                "formatSimpleNumber should produce same result as displayed value");
     }
 
     @Test
@@ -367,12 +367,12 @@ class StoControllerBrowserTest {
         String displayedDilithium = dilithiumInput.getAttribute("value");
         assertNotNull(displayedDilithium);
 
-        // Parse the displayed value using the same locale-aware parser
+        // Parse the displayed value using simple number parser
         Number parsedValue = (Number) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "return parseLocaleNumber(arguments[0]);", displayedDilithium);
+                "return parseSimpleNumber(arguments[0]);", displayedDilithium);
 
         // Verify parsed value matches original
-        assertEquals(1234567L, parsedValue.longValue(), "Locale parser should correctly parse displayed value");
+        assertEquals(1234567L, parsedValue.longValue(), "Simple parser should correctly parse displayed value");
 
         // Now change the value to a new number
         ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
