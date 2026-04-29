@@ -150,7 +150,7 @@ function parseLocaleNumber(str) {
 
 // Format number using user's locale
 function formatLocaleNumber(value) {
-    return Number(value).toLocaleString();
+    return Number(value).toLocaleString(navigator.language);
 }
 
 // Auto-submit numeric input forms on change

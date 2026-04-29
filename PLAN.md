@@ -258,6 +258,14 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
 - [x] UI test for row highlighting (Task 27):
   - Browser test verifies single highlight, toggle off on second click
   - Verifies clicking different row transfers highlight
+- [x] Credit field locale-aware number formatting (Task 28):
+  - Fixed formatLocaleNumber() to use navigator.language explicitly
+  - UI test verifies browser locale is used for number formatting
+- [x] Build info panel in sidebar (Task 29):
+  - Shows version and build date in panel-build-info
+  - Build date in black font
+  - Panel positioned at bottom of sidebar using margin-top: auto
+  - Docker Compose sets APP_BUILD_DATE at runtime (not build time)
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

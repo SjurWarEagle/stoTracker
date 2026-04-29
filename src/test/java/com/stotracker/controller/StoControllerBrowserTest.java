@@ -291,6 +291,60 @@ class StoControllerBrowserTest {
     }
 
     @Test
+    void creditsFormatting_usesBrowserLocale() {
+        // Pre-set a large value via backend
+        createCharacter(TEST_CHAR_NAME);
+        Long charId = repository.findByName(TEST_CHAR_NAME).get().getId();
+        StoData charData = repository.findById(charId).get();
+        charData.setCredits(1234567);
+        repository.save(charData);
+
+        driver.get(BASE_URL + port);
+        WebElement row = findCharacterRow(TEST_CHAR_NAME);
+        assertNotNull(row);
+
+        WebElement input = row.findElement(By.cssSelector("input.credits-input"));
+
+        // Trigger blur to invoke the formatting via formatLocaleNumber()
+        input.click();
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "arguments[0].dispatchEvent(new Event('blur', {bubbles: true}));", input);
+        waitForPageLoad();
+
+        String displayedValue = input.getAttribute("value");
+
+        // Get expected format from browser's navigator.language
+        String expectedFormat = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return Number(1234567).toLocaleString(navigator.language);");
+        String directLocaleFormat = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                "return formatLocaleNumber(1234567);");
+
+        assertEquals(expectedFormat, displayedValue,
+                "Displayed credits should match toLocaleString(navigator.language): " + displayedValue);
+        assertEquals(expectedFormat, directLocaleFormat,
+                "formatLocaleNumber should produce same result as toLocaleString(navigator.language)");
+        assertEquals(expectedFormat, directLocaleFormat,
+                "formatLocaleNumber should produce same result as displayed value");
+    }
+
+    @Test
+    void buildInfo_showsVersionAndBuildDate() {
+        driver.get(BASE_URL + port);
+
+        WebElement buildInfo = driver.findElement(By.cssSelector(".panel-build-info"));
+        assertNotNull(buildInfo, "Build info panel should exist");
+
+        WebElement version = buildInfo.findElement(By.cssSelector(".build-version"));
+        assertNotNull(version, "Version element should exist");
+        assertEquals("v1.0", version.getText().trim(), "Version should be v1.0");
+
+        WebElement buildDate = buildInfo.findElement(By.cssSelector(".build-date"));
+        assertNotNull(buildDate, "Build date element should exist");
+        assertNotNull(buildDate.getText());
+        assertFalse(buildDate.getText().trim().isEmpty(), "Build date should not be empty");
+    }
+
+    @Test
     void numberInput_LocaleRoundTrip_convertsCorrectly() {
         // This test verifies the full round-trip: backend value -> display -> parse -> backend
         // Create character
