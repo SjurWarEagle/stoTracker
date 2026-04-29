@@ -17,10 +17,6 @@
                 <div class="panel-0">
                     <div class="panel-0-title">STARFLEET</div>
                     <div class="panel-0-subtitle">🖖 Daily Tasks</div>
-                    <div class="panel-0-clock">
-                        <span class="lcars-clock-label">CET</span>
-                        <span class="lcars-clock" id="clock">00:00</span>
-                    </div>
                 </div>
 
                 <!-- Panel Segments -->
@@ -47,7 +43,10 @@
             <!-- Main Content -->
             <main class="lcars-main">
                 <!-- Header Panel - top of main content -->
-                <div class="lcars-top-header"></div>
+                <div class="lcars-top-header">
+                    <span class="lcars-clock-label">CET</span>
+                    <span class="lcars-clock" id="clock">00:00</span>
+                </div>
 
                 <!-- Flash Messages -->
             <div class="flash-messages" th:if="${flashSuccess}">

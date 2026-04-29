@@ -266,6 +266,10 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Build date in black font
   - Panel positioned at bottom of sidebar using margin-top: auto
   - Docker Compose sets APP_BUILD_DATE at runtime (not build time)
+- [x] Sidebar and header bar styling (Task 30):
+  - Sidebar background changed to --lcars-dark (content colour)
+  - Clock moved from sidebar to header bar right side
+  - Header bar uses justify-content: flex-end for clock positioning
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

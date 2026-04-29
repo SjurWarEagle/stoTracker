@@ -86,7 +86,7 @@ html, body {
     width: var(--elbow-width);
     display: flex;
     flex-direction: column;
-    background: var(--lcars-bg);
+    background: var(--lcars-dark);
     min-height: 100vh;
 }
 
@@ -238,6 +238,27 @@ html, body {
 .lcars-top-header {
     height: 100px;
     background: #ff8800;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 var(--space-xl);
+    gap: var(--space-sm);
+}
+
+.lcars-top-header .lcars-clock {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--lcars-bg);
+    letter-spacing: 2px;
+}
+
+.lcars-top-header .lcars-clock-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lcars-bg);
+    opacity: 0.7;
 }
 
 /* Add Form - Bottom of page */
