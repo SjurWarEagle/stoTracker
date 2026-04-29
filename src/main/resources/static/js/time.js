@@ -12,8 +12,8 @@ function restoreHighlight() {
 
     document.querySelectorAll('.name-cell').forEach(cell => {
         if (cell.textContent.trim() === highlightedName) {
-            // Add highlighted class to the parent TR
-            const row = cell.closest('tr');
+            // Add highlighted class to the parent row
+            const row = cell.closest('.grid-row');
             if (row) {
                 row.classList.add('highlighted');
             }
@@ -23,7 +23,7 @@ function restoreHighlight() {
 
 function toggleRowHighlight(nameCell) {
     const cell = nameCell.closest('.name-cell');
-    const row = nameCell.closest('tr');
+    const row = nameCell.closest('.grid-row');
     const name = cell.textContent.trim();
 
     // If clicking already-highlighted row, remove highlight
@@ -34,7 +34,7 @@ function toggleRowHighlight(nameCell) {
     }
 
     // Remove highlight from all other rows
-    document.querySelectorAll('tr.highlighted').forEach(r => {
+    document.querySelectorAll('.grid-row.highlighted').forEach(r => {
         r.classList.remove('highlighted');
     });
 

@@ -60,6 +60,7 @@ html, body {
     font-family: var(--font-main);
     font-size: 16px;
     line-height: 1.4;
+    overflow: hidden;
 }
 
 /* ===========================
@@ -242,6 +243,7 @@ html, body {
     align-items: center;
     justify-content: flex-end;
     padding: 0 var(--space-xl);
+    padding-right: 2em;
     gap: var(--space-sm);
 }
 
@@ -266,6 +268,7 @@ html, body {
     display: flex;
     justify-content: flex-end;
     margin-top: var(--space-lg);
+    padding-right: 2em;
 }
 
 /* ===========================
@@ -343,67 +346,82 @@ html, body {
 }
 
 /* ===========================
-   DATA TABLE - LCARS STYLE
+   DATA TABLE - CSS GRID
    =========================== */
 
-.lcars-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    background: #000000;
-    border: none;
+.lcars-grid-table {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg) 2em var(--space-lg) var(--space-xl);
+    gap: 0;
 }
 
-.lcars-table-wrapper {
-    padding: var(--space-lg) var(--space-xl);
+/* Header Row */
+.grid-header {
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 100px 100px 100px 120px;
+    gap: 0;
+    padding: var(--space-md) 0;
+    border-bottom: 4px solid var(--lcars-orange);
 }
 
-.lcars-table th,
-.lcars-table td {
+/* Data Row */
+.grid-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 100px 100px 100px 120px;
+    gap: 0;
+    min-height: 48px;
+    align-items: center;
+    border-bottom: 1px solid var(--lcars-border);
+}
+
+.grid-row:hover {
+    background: rgba(255, 136, 0, 0.05);
+}
+
+/* Row Highlight - Yellow Glow */
+.grid-row.highlighted {
+    background: rgba(255, 204, 0, 0.1);
+    box-shadow: inset 0 0 20px rgba(255, 204, 0, 0.2), 0 0 10px rgba(255, 204, 0, 0.3);
+}
+
+/* Grid Cell */
+.grid-cell {
     padding: var(--space-sm) var(--space-md);
-    text-align: left;
-    border-bottom: none;
     vertical-align: middle;
 }
 
-/* Column Headers - Large like panel title */
-.lcars-table th {
-    background: transparent;
+/* Header Cell */
+.header-cell {
     color: var(--lcars-orange);
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
-    padding-top: var(--space-md);
-    padding-bottom: var(--space-md);
     text-align: center;
 }
 
-/* Data Rows */
-.lcars-table tbody tr:hover {
-    background: rgba(255, 136, 0, 0.05);
+/* Empty Row */
+.empty-row {
+    grid-template-columns: 1fr;
 }
 
-.lcars-table tbody tr:last-child td {
-    border-bottom: none;
+.empty-row .grid-cell {
+    text-align: center;
+    color: var(--lcars-text-dim);
+    padding: var(--space-xl);
 }
 
-/* Name Cell */
-.name-cell {
-    font-weight: 700;
-    color: var(--lcars-blue);
-    font-size: 15px;
-    cursor: pointer;
+/* Credits Cell - right aligned */
+.credits-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    justify-content: flex-end;
 }
 
-.name-cell.clickable:hover {
-    color: var(--lcars-yellow);
-}
-
-/* Row Highlight - Yellow Glow on entire TR */
-tr.highlighted {
-    background: rgba(255, 204, 0, 0.1) !important;
-    box-shadow: inset 0 0 20px rgba(255, 204, 0, 0.2), 0 0 10px rgba(255, 204, 0, 0.3);
+.credits-warning {
+    font-size: 16px;
 }
 
 /* ===========================
@@ -500,13 +518,25 @@ tr.highlighted {
     font-family: var(--font-mono);
     font-size: 14px;
     border-radius: 4px;
-    width: 100px;
+    width: 100%;
     text-align: right;
+    box-sizing: border-box;
 }
 
 .lcars-input:focus {
     outline: none;
     border-color: var(--lcars-yellow);
+}
+
+/* ===========================
+   CREDITS CELL
+   =========================== */
+
+.credits-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    justify-content: flex-end;
 }
 
 /* ===========================
@@ -550,12 +580,6 @@ tr.highlighted {
 /* ===========================
    CREDITS CELL
    =========================== */
-
-.credits-cell {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-}
 
 .credits-warning {
     font-size: 16px;

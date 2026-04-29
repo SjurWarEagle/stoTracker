@@ -270,6 +270,14 @@ Build a Java 21 Spring Boot + Thymeleaf server with SQLite database and LCARS-st
   - Sidebar background changed to --lcars-dark (content colour)
   - Clock moved from sidebar to header bar right side
   - Header bar uses justify-content: flex-end for clock positioning
+- [x] CSS Grid layout redesign (Task 31):
+  - Replaced HTML table with CSS Grid for data display
+  - Explicit column widths: 60px 1fr 100px 100px 100px 100px 120px
+  - CREDITS column content aligns to same right edge (2em from page edge)
+  - All elements (clock, credits, add form) aligned to same distance from right
+  - No scrolling (overflow: hidden on html/body)
+  - Row highlighting updated to use .grid-row class
+  - Browser tests updated to use div-based xpath selectors
 
 ## Time Estimate
 **Total:** ~6 hours (including bug fixes and enhancements)

@@ -49,43 +49,42 @@
                 </div>
 
                 <!-- Flash Messages -->
-            <div class="flash-messages" th:if="${flashSuccess}">
-                <div class="flash-success" th:text="${flashSuccess}">Success message</div>
-            </div>
-            <div class="flash-messages" th:if="${flashError}">
-                <div class="flash-error" th:text="${flashError}">Error message</div>
-            </div>
+                <div class="flash-messages" th:if="${flashSuccess}">
+                    <div class="flash-success" th:text="${flashSuccess}">Success message</div>
+                </div>
+                <div class="flash-messages" th:if="${flashError}">
+                    <div class="flash-error" th:text="${flashError}">Error message</div>
+                </div>
 
-            <!-- Data Table -->
-            <div class="lcars-table-wrapper">
-                <table class="lcars-table">
-                <thead>
-                    <tr>
-                        <th>DELETE</th>
-                        <th>NAME</th>
-                        <th>EVENT</th>
-                        <th>DILITHIUM ORE</th>
-                        <th>REFINING</th>
-                        <th>RECRUITMENT</th>
-                        <th>CREDITS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="data : ${stoDataList}">
+                <!-- Data Table - CSS Grid -->
+                <div class="lcars-grid-table">
+                    <!-- Header Row -->
+                    <div class="grid-header">
+                        <div class="grid-cell header-cell">DELETE</div>
+                        <div class="grid-cell header-cell">NAME</div>
+                        <div class="grid-cell header-cell">EVENT</div>
+                        <div class="grid-cell header-cell">DILITHIUM ORE</div>
+                        <div class="grid-cell header-cell">REFINING</div>
+                        <div class="grid-cell header-cell">RECRUITMENT</div>
+                        <div class="grid-cell header-cell">CREDITS</div>
+                    </div>
+
+                    <!-- Data Rows -->
+                    <div class="grid-row" th:each="data : ${stoDataList}">
                         <!-- Delete Column -->
-                        <td>
+                        <div class="grid-cell">
                             <form action="/delete" method="post" class="delete-form"
                                   onsubmit="return confirm('Delete ' + this.querySelector('input[name=name]').value + '?')">
                                 <input type="hidden" name="name" th:value="${data.name}">
                                 <button type="submit" class="delete-btn">X</button>
                             </form>
-                        </td>
+                        </div>
 
                         <!-- Name Column - Clickable for highlight -->
-                        <td class="name-cell clickable" th:text="${data.name}" onclick="toggleRowHighlight(this)">Name</td>
+                        <div class="grid-cell name-cell clickable" th:text="${data.name}" onclick="toggleRowHighlight(this)">Name</div>
 
                         <!-- Event Column -->
-                        <td>
+                        <div class="grid-cell">
                             <div class="timestamp-cell">
                                 <form action="/timestamp" method="post" class="timestamp-form">
                                     <input type="hidden" name="id" th:value="${data.id}">
@@ -104,10 +103,10 @@
                                 </form>
                                 <span class="countdown overdue" th:unless="${data.eventTime}">overdue</span>
                             </div>
-                        </td>
+                        </div>
 
                         <!-- Dilithium Column -->
-                        <td>
+                        <div class="grid-cell">
                             <div class="dilithium-cell">
                                 <span class="lcars-badge"
                                       th:class="${'lcars-badge ' + (data.dilithium != null && data.dilithium > 40000 ? 'lcars-badge-high' : (data.dilithium != null && data.dilithium >= 24000 ? 'lcars-badge-mid' : 'lcars-badge-low'))}"
@@ -121,10 +120,10 @@
                                            th:value="${data.dilithium}">
                                 </form>
                             </div>
-                        </td>
+                        </div>
 
                         <!-- Refining Column -->
-                        <td>
+                        <div class="grid-cell">
                             <div class="timestamp-cell">
                                 <form action="/timestamp" method="post" class="timestamp-form">
                                     <input type="hidden" name="id" th:value="${data.id}">
@@ -143,10 +142,10 @@
                                 </form>
                                 <span class="countdown overdue" th:unless="${data.refiningTime}">overdue</span>
                             </div>
-                        </td>
+                        </div>
 
                         <!-- Recruitment Column -->
-                        <td>
+                        <div class="grid-cell">
                             <div class="timestamp-cell">
                                 <form action="/timestamp" method="post" class="timestamp-form">
                                     <input type="hidden" name="id" th:value="${data.id}">
@@ -165,49 +164,45 @@
                                 </form>
                                 <span class="unset-label" th:unless="${data.recruitmentTime}">UNSET</span>
                             </div>
-                        </td>
+                        </div>
 
                         <!-- Credits Column -->
-                        <td>
-                            <div class="credits-cell">
-                                <form action="/update" method="post" class="inline-form">
-                                    <input type="hidden" name="id" th:value="${data.id}">
-                                    <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
-                                    <input type="text"
-                                           min="0"
-                                           class="lcars-input credits-input"
-                                           th:value="${data.credits}">
-                                </form>
-                                <span class="credits-warning"
-                                      th:data-value="${data.credits}">
-                                    <span th:if="${data.credits != null && data.credits < 100000}" class="warning-critical">🚨</span>
-                                    <span th:if="${data.credits != null && data.credits >= 100000 && data.credits < 1000000}" class="warning-low">⚠️</span>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
+                        <div class="grid-cell credits-cell">
+                            <form action="/update" method="post" class="inline-form">
+                                <input type="hidden" name="id" th:value="${data.id}">
+                                <input type="hidden" name="credits" class="credits-value" th:value="${data.credits}">
+                                <input type="text"
+                                       min="0"
+                                       class="lcars-input credits-input"
+                                       th:value="${data.credits}">
+                            </form>
+                            <span class="credits-warning"
+                                  th:data-value="${data.credits}">
+                                <span th:if="${data.credits != null && data.credits < 100000}" class="warning-critical">🚨</span>
+                                <span th:if="${data.credits != null && data.credits >= 100000 && data.credits < 1000000}" class="warning-low">⚠️</span>
+                            </span>
+                        </div>
+                    </div>
 
                     <!-- Empty State -->
-                    <tr th:if="${#lists.isEmpty(stoDataList)}">
-                        <td colspan="7" class="empty-message">No characters tracked yet - Add a character above</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div><!-- end lcars-table-wrapper -->
+                    <div class="grid-row empty-row" th:if="${#lists.isEmpty(stoDataList)}">
+                        <div class="grid-cell empty-message" style="grid-column: 1 / -1;">No characters tracked yet - Add a character above</div>
+                    </div>
+                </div><!-- end lcars-grid-table -->
 
-            <!-- Add Form - Bottom of page above footer -->
-            <div class="lcars-add-form-bottom">
-                <form class="add-form" action="/add" method="post">
-                    <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
-                    <button type="submit" class="lcars-btn-pill">ADD</button>
-                </form>
-            </div>
+                <!-- Add Form - Bottom of page above footer -->
+                <div class="lcars-add-form-bottom">
+                    <form class="add-form" action="/add" method="post">
+                        <input type="text" name="name" placeholder="Character Name" maxlength="50" required>
+                        <button type="submit" class="lcars-btn-pill">ADD</button>
+                    </form>
+                </div>
 
-            <!-- Footer -->
-            <footer class="lcars-footer">
-                <div class="lcars-footer-right"></div>
-            </footer>
-        </main>
+                <!-- Footer -->
+                <footer class="lcars-footer">
+                    <div class="lcars-footer-right"></div>
+                </footer>
+            </main>
         </div><!-- end lcars-content-row -->
     </div><!-- end lcars-app -->
 

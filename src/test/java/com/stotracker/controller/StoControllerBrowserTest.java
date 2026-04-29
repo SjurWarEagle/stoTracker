@@ -675,7 +675,7 @@ class StoControllerBrowserTest {
     private WebElement findCharacterRow(String name) {
         try {
             return driver.findElement(By.xpath(
-                    "//tr[td[contains(@class,'name-cell')][text()='" + name + "']]"));
+                    "//div[contains(@class,'grid-row')][div[contains(@class,'name-cell')][text()='" + name + "']]"));
         } catch (org.openqa.selenium.NoSuchElementException e) {
             return null;
         }
